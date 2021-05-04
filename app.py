@@ -15,6 +15,19 @@ def home():
 
 
 # HTML 화면 보여주기
+@app.route('/study')
+@cross_origin()
+def study():
+    return render_template('study.html')
+
+# HTML 화면 보여주기
+@app.route('/board')
+@cross_origin()
+def board():
+    return render_template('board.html')
+
+
+# HTML 화면 보여주기
 @app.route('/login', methods=['GET'])
 @cross_origin()
 def login():
