@@ -10,6 +10,23 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="../static/assets/css/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+
+        var user_name = {{user_name | tojson}}
+        var sub_name = {{sub_name | tojson}}
+        var user_img_url = {{user_img_url | tojson}}
+        $(document).ready(function () {
+            showProfile();
+        });
+
+        function showProfile(code) {
+            var to_html = `<img src="${user_img_url}" class="rounded" width="155">`
+            $('#profile_img').append(to_html)
+            $('#name').append(user_name)
+            $('#sub').append(sub_name)
+        }
+		</script>
 	</head>
 	<body class="is-preload">
 
@@ -72,8 +89,9 @@
 									</header>
 									<div class="mini-posts">
 										<article>
-											<a href="#" class="image"><img src="../static/images/pic07.jpg" alt="" /></a>
-											<p>김예지(2기)</p>
+											<a href="#" class="image" id="profile_img"></a>
+											<p id="name"></p>
+											<p id="sub"></p>
 										</article>
 									</div>
 								</section>

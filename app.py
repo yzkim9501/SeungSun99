@@ -52,11 +52,11 @@ def login():
     encoding = urllib.request.urlopen(req).info().get_content_charset('utf-8')
     JSON_object = json.loads(res.decode(encoding))
 
-    #user name, sub name, 프로필사진 url 변수로 저장하여 login.html 파일로 패스
+    #user name, sub name, 프로필사진 url 변수로 저장하여 study.html 파일로 패스
     user_name=JSON_object['user']['profile']['first_name']
     sub_name=JSON_object['user']['profile']['last_name']
     user_img_url=JSON_object['user']['profile']['image_192']
-    my_res = make_response(render_template('login.html', user_name=user_name,user_img_url=user_img_url,sub_name=sub_name))
+    my_res = make_response(render_template('study.html', user_name=user_name,user_img_url=user_img_url,sub_name=sub_name))
     return my_res
 
 if __name__ == '__main__':
