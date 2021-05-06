@@ -4,9 +4,9 @@ import requests, json, urllib
 
 # database setting / Hojin Lee
 from pymongo import MongoClient
+
 client = MongoClient('localhost', 27017)
 db = client.dbseungsun99
-
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -18,20 +18,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @cross_origin()
 def home():
     return render_template('index.html')
-
-
-# HTML 화면 보여주기
-@app.route('/study')
-@cross_origin()
-def study():
-    return render_template('study.html')
-
-
-# HTML 화면 보여주기
-@app.route('/board')
-@cross_origin()
-def board():
-    return render_template('board.html')
 
 
 # HTML 화면 보여주기
