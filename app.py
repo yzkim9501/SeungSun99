@@ -21,6 +21,20 @@ def home():
 
 
 # HTML 화면 보여주기
+@app.route('/board')
+@cross_origin()
+def board():
+    return render_template('board.html')
+
+
+# HTML 화면 보여주기
+@app.route('/study')
+@cross_origin()
+def study():
+    return render_template('study.html')
+
+
+# HTML 화면 보여주기
 @app.route('/login', methods=['GET'])
 @cross_origin()
 def login():
@@ -31,6 +45,9 @@ def login():
     get_user_id_url = f'https://slack.com/api/oauth.v2.access?client_id=1682940574129.1987342115286&client_secret=2600ed20347e595da2812d5935658caa&code={receive_code}'
     res = requests.get(get_user_id_url)
     res_json = json.loads(res.text)
+
+    if not res_json['ok']:
+        return render_template('study.html')
 
     # user id 저장
     user_id = res_json['authed_user']['id']
