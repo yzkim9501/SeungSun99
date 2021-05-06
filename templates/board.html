@@ -5,97 +5,135 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>Editorial by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../static/assets/css/main.css" />
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script>
+<head>
+    <title>Editorial by HTML5 UP</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="../static/assets/css/main.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
 
-            var user_name = localStorage.getItem('user_name')
-            var sub_name = localStorage.getItem('sub_name')
-            var user_img_url = localStorage.getItem('user_img_url')
-			$(document).ready(function () {
-				showProfile();
-			});
+        var user_name = localStorage.getItem('user_name')
+        var sub_name = localStorage.getItem('sub_name')
+        var user_img_url = localStorage.getItem('user_img_url')
+        $(document).ready(function () {
+            showProfile();
+        });
 
-			function showProfile(code) {
-				var to_html = `<img src="${user_img_url}" class="rounded" width="155">`
-				$('#profile_img').append(to_html)
-				$('#name').append(user_name)
-				$('#sub').append(sub_name)
-			}
-		</script>
-	</head>
-	<body class="is-preload">
+        function showProfile(code) {
+            var to_html = `<img src="${user_img_url}" class="rounded" width="155">`
+            $('#profile_img').append(to_html)
+            $('#name').append(user_name)
+            $('#sub').append(sub_name)
+        }
+    </script>
+</head>
+<body class="is-preload">
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+<!-- Wrapper -->
+<div id="wrapper">
 
-				<!-- Main -->
-					<div id="main">
-						<div class="inner">
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
 
-							<!-- Header -->
-								<header id="header">
-									<a href="index.html" class="logo"><strong>승선99</strong>자유 게시판</a>
-								</header>
+            <!-- Header -->
+            <header id="header">
+                <a href="index.html" class="logo"><strong>승선99</strong>자유 게시판</a>
+            </header>
+            <br>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table class="alt">
+                        <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>TEST 1</td>
+                            <td>author</td>
+                            <td>2021-05-06</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>TEST 1</td>
+                            <td>author</td>
+                            <td>2021-05-06</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>TEST 1</td>
+                            <td>author</td>
+                            <td>2021-05-06</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>TEST 1</td>
+                            <td>author</td>
+                            <td>2021-05-06</td>
+                        </tr>
+                        </tbody>
+                    </table>
 
 
+                </div>
+            </div>
+        </div>
+    </div>
 
-							<!-- 여기에 게시판이 들어갑니다. -->
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="inner">
+            <!-- Menu -->
+            <nav id="menu">
+                <header class="major">
+                    <h2>Menu</h2>
+                </header>
+                <ul>
+                    <li><a href="/study">Study</a></li>
+                    <li><a href="/board">Board</a></li>
+                    <li><a href="/">log out</a></li>
+                </ul>
+            </nav>
 
+            <!-- Section -->
+            <section>
+                <header class="major">
+                    <h2>My info</h2>
+                </header>
+                <div class="mini-posts">
+                    <article>
+                        <a href="#" class="image" id="profile_img"></a>
+                        <p id="name"></p>
+                        <p id="sub"></p>
+                    </article>
+                </div>
+            </section>
 
+            <!-- Footer -->
+            <footer id="footer">
+                <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a
+                        href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.
+                </p>
+            </footer>
 
-						</div>
-					</div>
+        </div>
+    </div>
 
-				<!-- Sidebar -->
-					<div id="sidebar">
-						<div class="inner">
-							<!-- Menu -->
-								<nav id="menu">
-									<header class="major">
-										<h2>Menu</h2>
-									</header>
-									<ul>
-										<li><a href="/study">Study</a></li>
-										<li><a href="/board">Board</a></li>
-										<li><a href="/">log in</a></li>
-									</ul>
-								</nav>
+</div>
 
-							<!-- Section -->
-								<section>
-									<header class="major">
-										<h2>My info</h2>
-									</header>
-									<div class="mini-posts">
-										<article>
-											<a href="#" class="image" id="profile_img"></a>
-											<p id="name"></p>
-											<p id="sub"></p>
-										</article>
-									</div>
-								</section>
+<!-- Scripts -->
+<script src="../static/assets/js/jquery.min.js"></script>
+<script src="../static/assets/js/browser.min.js"></script>
+<script src="../static/assets/js/breakpoints.min.js"></script>
+<script src="../static/assets/js/util.js"></script>
+<script src="../static/assets/js/main.js"></script>
 
-							<!-- Footer -->
-								<footer id="footer">
-									<p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
-								</footer>
-
-						</div>
-					</div>
-
-			</div>
-
-		<!-- Scripts -->
-			<script src="../static/assets/js/jquery.min.js"></script>
-			<script src="../static/assets/js/browser.min.js"></script>
-			<script src="../static/assets/js/breakpoints.min.js"></script>
-			<script src="../static/assets/js/util.js"></script>
-			<script src="../static/assets/js/main.js"></script>
-
-	</body>
+</body>
 </html>
