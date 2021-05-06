@@ -2,6 +2,12 @@ from flask import Flask, render_template, make_response, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests, json, urllib
 
+# database setting / Hojin Lee
+from pymongo import MongoClient
+client = MongoClient('localhost', 27017)
+db = client.dbseungsun99
+
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
