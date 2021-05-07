@@ -1,6 +1,7 @@
 from flask import Flask, render_template, make_response, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests, json, urllib
+import post_message
 
 # database setting / Hojin Lee
 from pymongo import MongoClient
@@ -68,8 +69,9 @@ def login():
     image_192 = JSON_object['user']['profile']['image_192']
     my_res = make_response(
         render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192))
-    return my_res
 
+    post_message.dm(user_id, "Message here")  # user_id 다음의 인자 값으로 텍스트를 입력하면 슬랙 DM 으로 전송.
+    return my_res
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
