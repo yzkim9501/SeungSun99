@@ -16,6 +16,11 @@
         var user_name = localStorage.getItem('user_name')
         var sub_name = localStorage.getItem('sub_name')
         var user_img_url = localStorage.getItem('user_img_url')
+        console.log(user_name)
+            if(user_name==null){
+                alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
+                window.location.href="http://localhost:5000/"
+            }
         $(document).ready(function () {
             showProfile();
         });
