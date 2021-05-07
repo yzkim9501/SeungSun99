@@ -1,7 +1,8 @@
-from flask import Flask, render_template, make_response, request, jsonify
+from flask import Flask, render_template, make_response, request, jsonify, session, redirect,g
 from flask_cors import CORS, cross_origin
 import requests, json, urllib
 import post_message
+from functools import wraps
 
 # database setting / Hojin Lee
 from pymongo import MongoClient
@@ -12,18 +13,34 @@ db = client.dbseungsun99
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.secret_key = 'fjlkvxiwnv1v15s5v5s5s5n5b5th'
+
+
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'username' in session:
+            return f(*args, **kwargs)
+        else:
+            return redirect('/')
+
+    return wrap
 
 
 # HTML 화면 보여주기
 @app.route('/')
 @cross_origin()
 def home():
-    return render_template('index.html')
+    if 'username' in session:
+        return redirect('/study')
+    else:
+        return render_template('index.html')
 
 
 # HTML 화면 보여주기
 @app.route('/board')
 @cross_origin()
+@login_required
 def board():
     return render_template('board.html')
 
@@ -31,6 +48,7 @@ def board():
 # HTML 화면 보여주기
 @app.route('/study')
 @cross_origin()
+@login_required
 def study():
     return render_template('study.html')
 
@@ -70,8 +88,18 @@ def login():
     my_res = make_response(
         render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192))
 
-    post_message.dm(user_id, "Message here")  # user_id 다음의 인자 값으로 텍스트를 입력하면 슬랙 DM 으로 전송.
+    post_message.dm(user_id, "Message here1234")  # user_id 다음의 인자 값으로 텍스트를 입력하면 슬랙 DM 으로 전송.
+
+    session['username'] = user_id
+
     return my_res
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/')
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
