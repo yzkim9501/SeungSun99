@@ -15,6 +15,7 @@ db = get_db()
 @login_required
 def board():
     board_list = list(db.board.find({}, {'_id': False}))
+    db.board.create_index("date")
     return render_template('board.html', posts=board_list)
 
 
@@ -46,3 +47,4 @@ def create():
             return redirect('/board')
 
     return render_template("create.html")
+
