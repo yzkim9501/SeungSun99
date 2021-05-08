@@ -23,7 +23,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
     <title>승선99 | 스파르타</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
@@ -32,9 +36,9 @@
     <script>
         var user_name, sub_name, user_img_url;
         if ("{{first_name}}" == '') { //만약에 플라스크에서 넘어온 정보가 없으면 새로고침한경우
-            if(localStorage.getItem('user_name')==null){
+            if (localStorage.getItem('user_name') == null) {
                 alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
-                window.location.href="http://localhost:5000/"
+                window.location.href = "http://localhost:5000/"
             }
             user_name = localStorage.getItem('user_name')
             sub_name = localStorage.getItem('sub_name')
@@ -47,6 +51,7 @@
             localStorage.setItem('sub_name', sub_name)
             localStorage.setItem('user_img_url', user_img_url)
         }
+
         $(document).ready(function () {
             showProfile();
         });
@@ -60,7 +65,7 @@
     </script>
 
     <style>
-         .actions {
+        .actions {
             position: relative;
             left: 125px;
             right: 100px;
@@ -68,6 +73,12 @@
 
         .card-body {
             text-align: center;
+        }
+        .form-label {
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center
         }
     </style>
 </head>
@@ -82,7 +93,7 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="index.html" class="logo"><strong>승선99</strong>에 올라타세요!</a>
+                <a href="/study" class="logo"><strong>승선99</strong>에 올라타세요!</a>
             </header>
 
             <!-- Banner -->
@@ -90,19 +101,90 @@
                 <div class="content">
                     <header>
                         <h1>승선99<br/>
-                            스터디 플랫폼</h1>
-                        <p>자유롭게 당신의 스터디를 모집하세요!</p>
+                            스터디 확인하기</h1>
+                        <p>원하는 스터디가 있는지 찾아보세요!</p>
                     </header>
-                    <p>승선99는 항해99 크루원들을 위해 2기 1팀 스터디원들이 토이프로젝트로 제작한 스터디 모집 플랫폼입니다. 알고리즘 스터디, Code with me 등 다양한 주제의 스터디를 지금
-                        만나보세요!</p>
+                    <p>이미 항해99 팀원들이 모집하는 스터디중에 원하는 스터디가 있는지 확인해보시고, 없다면 밑의 버튼을 눌러 새 스터디를 만들어보세요!</p>
                     <ul class="actions">
-                        <li><a href="#" class="button big">모집중인 스터디 확인하기</a></li>
+                        <li><a data-toggle="modal" href="#study-form" class="button big">스터디원 모집하러 가기</a></li>
                     </ul>
                 </div>
                 <span class="image object">
-										<img src="../static/images/pic10.jpg" alt=""/>
+										<img src="../static/images/SS03.jpg" alt=""/>
 									</span>
             </section>
+            <!-- Modal -->
+            <div class="modal fade" id="study-form" role="dialog" style="z-index: 15000">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">스터디원 모집하기</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="#">
+                                <div class="row gtr-uniform">
+                                    <div class="col-12 col-12-xsmall form-label">
+                                        <label for="study-name">스터디 이름 : </label>
+                                        <input type="text" id="study-name" value="" style="width: 80%" placeholder="Name"/>
+                                    </div>
+                                    <div class="col-8 col-12-xsmall form-label">
+                                        <label for="datetimepicker1">스터디 시작 : </label>
+                                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="width: 70%">
+                                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1">
+                                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                                <div class="input-group-text">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-12-xsmall form-label">
+                                        <input type="checkbox" id="join">
+                                        <label for="join">중도 참여 가능 여부</label>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-6 form-label">
+                                        <select name="demo-category" id="demo-category" style="width: 80%;">
+                                            <option value="">- 스터디 난이도 -</option>
+                                            <option value="3">무관</option>
+                                            <option value="2">하</option>
+                                            <option value="1">중</option>
+                                            <option value="0">상</option>
+                                        </select>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-6 form-label">
+                                        <select name="demo-category" id="demo-category" style="width: 80%;">
+                                            <option value="">- 스터디 방식 -</option>
+                                            <option value="0">감시형</option>
+                                            <option value="1">토이 프로젝트</option>
+                                            <option value="2">개인 프로젝트</option>
+                                            <option value="3">독서실</option>
+                                            <option value="4">기타(설명란 기재)</option>
+                                        </select>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-12 form-label">
+                                        <label for="study-explain"></label>
+                                        <textarea id="study-explain" placeholder="자세한 스터디 진행 방식을 공유해주세요."
+                                                  rows="6" style="width: 90%;"></textarea>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-12">
+                                        <ul class="actions">
+                                            <li><input type="submit" class="button primary small fit" value="Save"/></li>
+                                            <li><input type="button" class="button primary small fit" data-dismiss="modal" value="Close"/></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
 
             <!-- 여기에 스터디 카드 넣어주세요 -->
             <div class="card-columns">
@@ -137,7 +219,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Coding With Me</h5>
                         <p class="card-text">항해99 사전준비 스터디 그룹입니다. 열심히 하실 분만 오세요!</p>
-                       <ul class="actions">
+                        <ul class="actions">
                             <li><a href="#" class="button primary">가입신청</a></li>
                         </ul>
                     </div>
@@ -188,17 +270,17 @@
                     </div>
                 </div>
             </div>
-                <ul class="pagination">
-                    <li><span class="button disabled">Prev</span></li>
-                    <li><a href="#" class="page active">1</a></li>
-                    <li><a href="#" class="page">2</a></li>
-                    <li><a href="#" class="page">3</a></li>
-                    <li><span>&hellip;</span></li>
-                    <li><a href="#" class="page">8</a></li>
-                    <li><a href="#" class="page">9</a></li>
-                    <li><a href="#" class="page">10</a></li>
-                    <li><a href="#" class="button">Next</a></li>
-                </ul>
+            <ul class="pagination">
+                <li><span class="button disabled">Prev</span></li>
+                <li><a href="#" class="page active">1</a></li>
+                <li><a href="#" class="page">2</a></li>
+                <li><a href="#" class="page">3</a></li>
+                <li><span>&hellip;</span></li>
+                <li><a href="#" class="page">8</a></li>
+                <li><a href="#" class="page">9</a></li>
+                <li><a href="#" class="page">10</a></li>
+                <li><a href="#" class="button">Next</a></li>
+            </ul>
         </div>
     </div>
 
