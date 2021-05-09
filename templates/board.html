@@ -6,23 +6,30 @@
 -->
 <html>
 <head>
-    <title>Editorial by HTML5 UP</title>
+    <title>승선99 | 스파르타</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="../static/assets/css/main.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/hh99.ico" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
     <script>
 
         var user_name = localStorage.getItem('user_name')
         var sub_name = localStorage.getItem('sub_name')
         var user_img_url = localStorage.getItem('user_img_url')
-        console.log(user_name)
-            if(user_name==null){
-                alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
-                window.location.href="http://localhost:5000/"
-            }
+        if(user_name==null){
+            alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
+            window.location.href="http://localhost:5000/"
+        }
         $(document).ready(function () {
             showProfile();
+            showBoardList(1);
         });
 
         function showProfile(code) {
@@ -30,6 +37,59 @@
             $('#profile_img').append(to_html)
             $('#name').append(user_name)
             $('#sub').append(sub_name)
+        }
+
+
+        function showBoardList(pageNum) {
+            var data = getPageData(pageNum);
+            $('#board-list').empty();
+            for (var i = 0;i < 10;i++){
+                var to_html = `<<tr>
+                            <td>${i}</td>
+                            <td>TEST ${i}</td>
+                            <td>author${i}</td>
+                            <td>2021-05-06</td>
+                        </tr>`
+                $('#board-list').append(to_html)
+            }
+        }
+        function getPageData(page){
+            //여기에 페이지 수를 넘기면 게시물을 반환하는 API 작성
+            pagination(page,100);
+        }
+        function pagination(page, totalCount){
+            $('#pagination').empty();
+            // page : 현재 페이지, totalCount :  전체 게시물 갯수
+            var countList=10; //한 페이지에 출력될 게시물 수
+            var countPage=7; //한 화면에 출력될 페이지 수
+            var totalPage = parseInt(totalCount / countList);
+            var to_html=``;
+            if (totalCount % countList > 0) {
+                totalPage++;
+            }
+            if (totalPage < page) {
+                page = totalPage;
+            }
+            var startPage = (parseInt((page-1)/countPage))*countPage+1;
+            var endPage = startPage + countPage - 1;
+            if (endPage > totalPage) {
+                endPage = totalPage;
+            }
+            if (page > 1) {
+                to_html+=`<li><button onclick="showBoardList(${page-1})" class="button">Prev</button></li>`
+            }else to_html+=`<li><button onclick="showBoardList(1)" class="button disabled">Prev</button></li>`
+
+            for (var iCount = startPage; iCount <= endPage; iCount++) {
+                if (iCount == page) {
+                    to_html+=`<li><a href="javascript:showBoardList(${iCount})" class="page active">${iCount}</a></li>`
+                } else {
+                    to_html+=`<li><a href="javascript:showBoardList(${iCount})" class="page">${iCount}</a></li>`
+                }
+            }
+            if (page < totalPage) {
+                to_html+=`<li><button onclick="showBoardList(${page+1})" class="button">Next</button></li>`
+            }else to_html+=`<li><button onclick="showBoardList(${totalPage})" class="button disabled">Next</button></li>`
+            $('#pagination').append(to_html);
         }
     </script>
 </head>
@@ -52,42 +112,21 @@
                     <table class="alt">
                         <thead>
                         <tr>
-                            <th>Index</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
+                            <th width="5%">Index</th>
+                            <th width="60%">제목</th>
+                            <th width="15%">작성자</th>
+                            <th width="20%">작성일</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
+                        <tbody id="board-list">
                         </tbody>
                     </table>
-
-
                 </div>
+                <div style="float: right;">
+                    <a href="#" class="button primary">글쓰기</a>
+                </div>
+                <ul class="pagination" id="pagination">
+                </ul>
             </div>
         </div>
     </div>
@@ -121,7 +160,7 @@
                 </div>
             </section>
 
-            <!-- Footer -->
+            <!— Footer —>
             <footer id="footer">
                 <p class="copyright">&copy; 승선99. All rights reserved. <br>항해99 2기 김예지, 오일교, 이호진, 정창길, 한주연.<br>
                     Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
@@ -132,7 +171,7 @@
 
 </div>
 
-<!-- Scripts -->
+<!— Scripts —>
 <script src="../static/assets/js/jquery.min.js"></script>
 <script src="../static/assets/js/browser.min.js"></script>
 <script src="../static/assets/js/breakpoints.min.js"></script>
