@@ -1,24 +1,37 @@
-from flask import Blueprint, render_template
+import datetime
+
+from flask import Blueprint, flash, render_template, request, redirect
 from auth import login_required
-import db
-import pymongo  # 정렬 기능이 여깄음 ㅇㅅㅇ;;
+from db import get_db
+from flask import session
+import time
+
 bp = Blueprint("study", __name__)
 
-db = db.get_db()
+db = get_db()
 
 
-@bp.route('/study')
+@bp.route('/study', methods=["GET", "POST"])
 @login_required
-def study():
-    study_list = list(db.study.find({}).sort('date', pymongo.ASCENDING))
+def study_create():
+    if request.method == "POST":
 
-    return render_template('study.html', posts=study_list)
+        title = request.form.get("title")
+        contents = request.form.get("contents")
+        type = request.form.get("type")
+        level = request.form.get("level")
 
+        to_db = {
+            "title": title,
+            "contents": contents,
+            "type": type,
+            "level": level,
+            "view": 0,
+            "date": time.strftime('%y-%m-%d %H:%M:%S')
+        }
+        db.study.insert_one(to_db)
 
-# @bp.route('/board', methods=['GET'])  # list view
-# @login_required
-# def board():
-#     board_list = list(db.board.find({}, {'_id': False}).sort('date', pymongo.DESCENDING))
-#     index = board_list[0]
-#     print(index['index'])
-#     return render_template('board.html', posts=board_list)
+        return render_template("study.html")
+    else:
+        return render_template("study.html")
+
