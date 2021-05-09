@@ -123,16 +123,16 @@
                             <h4 class="modal-title">스터디원 모집하기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="#">
+                            <form method="post" action="/study">
                                 <div class="row gtr-uniform">
                                     <div class="col-12 col-12-xsmall form-label">
                                         <label for="study-name">스터디 이름 : </label>
-                                        <input type="text" id="study-name" value="" style="width: 80%" placeholder="Name"/>
+                                        <input type="text" id="study-name" value="" style="width: 80%" placeholder="Name" name="title"/>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
                                         <label for="datetimepicker1">스터디 시작 : </label>
                                         <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="width: 70%">
-                                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1">
+                                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" name="date">
                                             <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                                                 <div class="input-group-text">
                                                     <i class="fa fa-calendar"></i>
@@ -146,7 +146,7 @@
                                     </div>
                                     <!-- Break -->
                                     <div class="col-6 form-label">
-                                        <select name="demo-category" id="demo-category" style="width: 80%;">
+                                        <select name="level" id="demo-category" style="width: 80%;" >
                                             <option value="">- 스터디 난이도 -</option>
                                             <option value="3">무관</option>
                                             <option value="2">하</option>
@@ -156,7 +156,7 @@
                                     </div>
                                     <!-- Break -->
                                     <div class="col-6 form-label">
-                                        <select name="demo-category" id="demo-category" style="width: 80%;">
+                                        <select name="type" id="demo-category" style="width: 80%;" >
                                             <option value="">- 스터디 방식 -</option>
                                             <option value="0">감시형</option>
                                             <option value="1">토이 프로젝트</option>
@@ -169,7 +169,7 @@
                                     <div class="col-12 form-label">
                                         <label for="study-explain"></label>
                                         <textarea id="study-explain" placeholder="자세한 스터디 진행 방식을 공유해주세요."
-                                                  rows="6" style="width: 90%;"></textarea>
+                                                  rows="6" style="width: 90%;" name="contents"></textarea>
                                     </div>
                                     <!-- Break -->
                                     <div class="col-12">
