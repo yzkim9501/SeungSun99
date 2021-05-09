@@ -11,11 +11,6 @@ bp = Blueprint("study", __name__)
 db = get_db()
 
 
-@bp.route('/study')
-@login_required
-def study():
-    return render_template('study.html')
-
 @bp.route('/study', methods=["GET", "POST"])
 @login_required
 def study_create():
