@@ -60,7 +60,7 @@
         });
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
-            $(".modal-body #modal-card-id").val( cardId );
+            $(".modal-body #modal-card-id").val(cardId);
         });
 
         function showProfile() {
@@ -73,7 +73,7 @@
         function showStudyList(pageNum) {
             var data = getPageData(pageNum);
             $('#card-box').empty();
-            for (var i = 0;i < 9;i++){
+            for (var i = 0; i < 9; i++) {
                 var to_html = `<div class="card" id="card-${i}" style="width: 100%;">
                     <div class="card-body" id="card-body-${i}">
                         <h5 class="card-title">Coding With Me</h5>
@@ -87,43 +87,56 @@
                 $('#card-box').append(to_html)
             }
         }
-        function getPageData(page){
+
+        function getPageData(page) {
             //여기에 페이지 수를 넘기면 게시물을 반환하는 API 작성
-            pagination(page,100);
+            pagination(page, 100);
         }
-        function pagination(page, totalCount){
+
+        function pagination(page, totalCount) {
             $('#pagination').empty();
             // page : 현재 페이지, totalCount :  전체 게시물 갯수
-            var countList=9; //한 페이지에 출력될 게시물 수
-            var countPage=7; //한 화면에 출력될 페이지 수
+            var countList = 9; //한 페이지에 출력될 게시물 수
+            var countPage = 7; //한 화면에 출력될 페이지 수
             var totalPage = parseInt(totalCount / countList);
-            var to_html=``;
+            var to_html = ``;
             if (totalCount % countList > 0) {
                 totalPage++;
             }
             if (totalPage < page) {
                 page = totalPage;
             }
-            var startPage = (parseInt((page-1)/countPage))*countPage+1;
+            var startPage = (parseInt((page - 1) / countPage)) * countPage + 1;
             var endPage = startPage + countPage - 1;
             if (endPage > totalPage) {
                 endPage = totalPage;
             }
             if (page > 1) {
-                to_html+=`<li><button onclick="showStudyList(${page-1})" class="button">Prev</button></li>`
-            }else to_html+=`<li><button onclick="showStudyList(1)" class="button disabled">Prev</button></li>`
+                to_html += `<li><button onclick="showStudyList(${page - 1})" class="button">Prev</button></li>`
+            } else to_html += `<li><button onclick="showStudyList(1)" class="button disabled">Prev</button></li>`
 
             for (var iCount = startPage; iCount <= endPage; iCount++) {
                 if (iCount == page) {
-                    to_html+=`<li><a href="javascript:showStudyList(${iCount})" class="page active">${iCount}</a></li>`
+                    to_html += `<li><a href="javascript:showStudyList(${iCount})" class="page active">${iCount}</a></li>`
                 } else {
-                    to_html+=`<li><a href="javascript:showStudyList(${iCount})" class="page">${iCount}</a></li>`
+                    to_html += `<li><a href="javascript:showStudyList(${iCount})" class="page">${iCount}</a></li>`
                 }
             }
             if (page < totalPage) {
-                to_html+=`<li><button onclick="showStudyList(${page+1})" class="button">Next</button></li>`
-            }else to_html+=`<li><button onclick="showStudyList(${totalPage})" class="button disabled">Next</button></li>`
+                to_html += `<li><button onclick="showStudyList(${page + 1})" class="button">Next</button></li>`
+            } else to_html += `<li><button onclick="showStudyList(${totalPage})" class="button disabled">Next</button></li>`
             $('#pagination').append(to_html);
+        }
+
+        function openclose() {
+            let status = $('#card-box').css('display');
+            if (status == 'block') {
+                $('#card-box').hide();
+                $('#card-box').text('진행 중인 스터디 닫기')
+            } else {
+                $('#card-box').show();
+                $('#card-box').text('진행 중인 스터디 보기')
+            }
         }
     </script>
 
@@ -143,6 +156,9 @@
             flex-direction: row;
             justify-content: center;
             align-items: center
+        }
+
+        .card-columns {
         }
     </style>
 </head>
@@ -164,12 +180,13 @@
             <section id="banner">
                 <div class="content">
                     <header>
-                        <h1>승선99<br/>
-                            스터디 확인하기</h1>
+                        <h1>승선99<br/></h1>
+                        <h1>너, 내 동료가 되라!</h1>
                         <p>원하는 스터디가 있는지 찾아보세요!</p>
                     </header>
                     <p>이미 항해99 팀원들이 모집하는 스터디중에 원하는 스터디가 있는지 확인해보시고, 없다면 밑의 버튼을 눌러 새 스터디를 만들어보세요!</p>
                     <ul class="actions">
+                        <li><a onclick="openclose()" class="button primary">진행 중인 스터디 보기</a></li>
                         <li><a data-toggle="modal" href="#study-form" class="button big">스터디원 모집하러 가기</a></li>
                     </ul>
                 </div>
@@ -275,7 +292,8 @@
                                     <div class="col-12 form-label">
                                         <input type="hidden" id="modal-card-id" value=""/>
                                         <label for="question-content"></label>
-                                        <textarea id="question-content" placeholder="리더에게 질문할 내용을 자세히 작성해주세요. &#13;&#10;답변은 리더가 직접 슬랙 메신저로 해주실거에요!"
+                                        <textarea id="question-content"
+                                                  placeholder="리더에게 질문할 내용을 자세히 작성해주세요. &#13;&#10;답변은 리더가 직접 슬랙 메신저로 해주실거에요!"
                                                   rows="6" style="width: 90%;"></textarea>
                                     </div>
                                     <div class="col-12">
@@ -295,10 +313,10 @@
 
             <!-- 여기에 스터디 카드 넣어주세요 -->
             <div class="card-columns" id="card-box">
-
+                <ul class="pagination" id="pagination">
+                </ul>
             </div>
-            <ul class="pagination" id="pagination">
-            </ul>
+
         </div>
     </div>
 
