@@ -16,11 +16,6 @@
         var user_name = localStorage.getItem('user_name')
         var sub_name = localStorage.getItem('sub_name')
         var user_img_url = localStorage.getItem('user_img_url')
-        console.log(user_name)
-            if(user_name==null){
-                alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
-                window.location.href="http://localhost:5000/"
-            }
         $(document).ready(function () {
             showProfile();
         });
@@ -44,7 +39,10 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="/board" class="logo"><strong>승선99</strong>자유 게시판</a>
+                <a href="index.html" class="logo"><strong>승선99</strong>자유 게시판</a>
+                {% if session %}
+                    <a class="action" href="{{ url_for('board.create') }}">New</a>
+                {% endif %}
             </header>
             <br>
             <div class="content">
@@ -58,31 +56,17 @@
                             <th>작성일</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>TEST 1</td>
-                            <td>author</td>
-                            <td>2021-05-06</td>
-                        </tr>
+                        {% block content %}
+                            <tbody>
+                            {% for post in posts %}
+                                <tr>
+                                    <td>{{ post['index'] }}</td>
+                                    <td><a href="" >{{ post['title'] }}</a></td>
+                                    <td>{{ post['username'] }}</td>
+                                    <td>{{ post['date'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endblock %}
                         </tbody>
                     </table>
 
@@ -123,8 +107,9 @@
 
             <!-- Footer -->
             <footer id="footer">
-                <p class="copyright">&copy; 승선99. All rights reserved. <br>항해99 2기 김예지, 오일교, 이호진, 정창길, 한주연.<br>
-                    Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+                <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a
+                        href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.
+                </p>
             </footer>
 
         </div>

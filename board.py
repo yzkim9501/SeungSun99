@@ -16,8 +16,8 @@ db = db.get_db()
 @login_required
 def board():
     board_list = list(db.board.find({}, {'_id': False}).sort('date', pymongo.DESCENDING))
-    index = board_list[0]
-    print(index['index'])
+    # index = board_list[0]
+    # print(index['index'])
     return render_template('board.html', posts=board_list)
 
 
