@@ -1,4 +1,6 @@
 from flask import Blueprint, session, request, render_template, jsonify
+
+import post_message
 from auth import login_required
 import db
 import pymongo
@@ -33,4 +35,28 @@ def join_study():
     db.join_member.insert_one(dic)
 
     return jsonify({'msg': '스터디 참여 완료'})
+
+
+@bp.route('/api/exit_study')
+@login_required
+def exit_study():
+    user_id = session['user_id']
+    db.join_member.delete_one({'user_id': user_id})
+
+    return jsonify({'msg': '삭제 완료'})
+
+
+@bp.route('/study', methods=['POST'])
+@login_required
+def message_to_leader():
+    if request.method == 'POST':
+        id = session['user_name']
+        text = id + '님이 메세지 전송. \n' + request.form['to-leader']
+
+        post_message.dm(session['user_id'], text)
+
+        return jsonify({'msg': '메시지 전송됨.'})
+    else:
+        return jsonify({'msg': '전송 실패'})
+
 

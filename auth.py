@@ -16,7 +16,7 @@ bp = Blueprint("auth", __name__)
 def login_required(f):
     @wraps(f)
     def wrap(**kwargs):
-        if 'username' in session:
+        if 'user_name' and 'user_id' in session:
             return f(**kwargs)
         else:
             return redirect('/')
@@ -59,7 +59,7 @@ def login():
 
     # post_message.dm(user_id, "Message here1234")  # user_id 다음의 인자 값으로 텍스트를 입력하면 슬랙 DM 으로 전송.
 
-    session['username'] = first_name
+    session['user_name'] = first_name
     session['user_id'] = user_id
 
     if db.user_info.find_one({'user_id': user_id}):
@@ -77,4 +77,4 @@ def login():
 def logout():
     session.pop('username', None)
     session.pop('user_id', None)
-    return jsonify({'msg': '로그아웃 완료'})
+    return jsonify({'msg': '로그아웃 완료'}) and redirect('/')

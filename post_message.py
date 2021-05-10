@@ -1,5 +1,7 @@
 import requests
 
+# 참고 사이트: https://developerdk.tistory.com/96
+
 
 def dm(channel, text):
     response = requests.post("https://slack.com/api/chat.postMessage",
