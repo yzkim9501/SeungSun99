@@ -9,7 +9,7 @@ app.secret_key = 'fjlkvxiwnv1v15s5v5s5s5n5b5th'
 
 @app.route('/')
 def home():
-    if 'user_name' in session:
+    if 'user_name' and 'user_id' in session:
         return redirect('/study')
     else:
         return render_template('index.html')
