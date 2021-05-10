@@ -19,4 +19,4 @@ app.register_blueprint(auth.bp)
 app.register_blueprint(study.bp)
 app.register_blueprint(board.bp)
 
-app.run('127.0.0.1', port=5000, debug=True)
+app.run('0.0.0.0', port=5000, debug=True)

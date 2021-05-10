@@ -30,7 +30,8 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css"/>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css"/>
-    <title>승선99 | 스파르타</title>
+    <title>승선99 - 너, 내 동료가 돼라!</title>
+    <link rel="shortcut icon" href="../static/images/ss99.ico">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="../static/assets/css/main.css"/>
@@ -56,7 +57,6 @@
 
         $(document).ready(function () {
             showProfile();
-            showStudyList(1);
         });
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
@@ -127,7 +127,7 @@
             } else to_html += `<li><button onclick="showStudyList(${totalPage})" class="button disabled">Next</button></li>`
             $('#pagination').append(to_html);
         }
-        let status = false;
+        let status = true;
         function openclose() {
             if (status) {
                 showStudyList(1)
