@@ -59,13 +59,21 @@
         }
 
 
+        function showPostDetail(postIdx){
+            //여기에 포스트인덱스로 한개의 스터디 디테일 가져오는 API 작성
+            $('#board-detail').modal('show');
+            $('#post-name').val(postIdx+'번 게시물을 가지고와주세요');
+            //모든 입력폼 disable하고, 작성자면 수정/삭제/닫기버튼. 작성자가 아니면 닫기버튼 표출
+            //작성자가 수정버튼을 클릭하면 모든 입력폼 enable하고 저장버튼
+        }
+
         function showBoardList(pageNum) {
             var data = getPageData(pageNum);
             $('#board-list').empty();
             for (var i = 0;i < 10;i++){
                 var to_html = `<<tr>
                             <td>${i}</td>
-                            <td>TEST ${i}</td>
+                            <td><a href="javascript:showPostDetail(${i});">TEST ${i}</a></td>
                             <td>author${i}</td>
                             <td>2021-05-06</td>
                         </tr>`
@@ -142,7 +150,7 @@
                     </table>
                 </div>
                 <div style="float: right;">
-                    <a data-toggle="modal" href="#board-new" class="button primary">글쓰기</a>
+                    <a data-toggle="modal" href="#board-detail" class="button primary">글쓰기</a>
                 </div>
                 <ul class="pagination" id="pagination">
                 </ul>
@@ -150,7 +158,7 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="board-new" role="dialog" style="z-index: 15000">
+            <div class="modal fade" id="board-detail" role="dialog" style="z-index: 15000">
                 <div class="modal-dialog modal-lg">
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -230,7 +238,6 @@
 </div>
 
 <!— Scripts —>
-<script src="../static/assets/js/jquery.min.js"></script>
 <script src="../static/assets/js/browser.min.js"></script>
 <script src="../static/assets/js/breakpoints.min.js"></script>
 <script src="../static/assets/js/util.js"></script>

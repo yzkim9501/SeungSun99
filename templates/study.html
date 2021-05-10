@@ -23,7 +23,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
@@ -35,7 +34,6 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="../static/assets/css/main.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         var user_name, sub_name, user_img_url;
         if ("{{first_name}}" == '') { //만약에 플라스크에서 넘어온 정보가 없으면 새로고침한경우
@@ -69,7 +67,13 @@
             $('#name').append(user_name)
             $('#sub').append(sub_name)
         }
-
+        function showStudyDetail(studyIdx){
+            //여기에 스터디인덱스로 한개의 스터디 디테일 가져오는 API 작성
+            $('#study-form').modal('show');
+            $('#study-name').val(studyIdx+'번 스터디를 가지고와주세요');
+            //모든 입력폼 disable하고, 작성자면 수정/삭제/닫기버튼. 작성자가 아니면 신청/닫기버튼 표출
+            //작성자가 수정버튼을 클릭하면 모든 입력폼 enable하고 저장버튼
+        }
         function showStudyList(pageNum) {
             var data = getPageData(pageNum);
             $('#card-box').empty();
@@ -77,9 +81,11 @@
                 var to_html = `<div class="card" id="card-${i}" style="width: 100%;">
                     <div class="card-body" id="card-body-${i}">
                         <h5 class="card-title">Coding With Me</h5>
-                        <p class="card-text">항해99 사전준비 스터디 그룹입니다. 열심히 하실 분만 오세요!</p>
+                        <p class="card-text">항해99 사전준비 스터디 그룹입니다. 열심히 하실 분만 오세요!<br>
+                        <strong style="color:#f56a6a">난이도</strong> : <span>중</span> <strong style="color:#f56a6a">카테고리 </strong>: <span>감시형</span><br>
+                        </p>
                         <ul class="actions">
-                            <li><a href="#" class="button primary">가입신청</a></li>
+                            <li><a href="javascript:showStudyDetail(${i});" class="button primary">자세히 보기</a></li>
                             <li><a data-toggle="modal" data-id="${i}" href="#leader-question" class="button primary open-reader-question">리더에게 질문하기</a></li>
                         </ul>
                     </div>
@@ -161,6 +167,10 @@
 
         .card-columns {
             display: hidden;
+        }
+
+        .study-view-detail{
+            cursor:pointer;
         }
     </style>
 </head>
@@ -363,7 +373,6 @@
 </div>
 
 <!-- Scripts -->
-<script src="../static/assets/js/jquery.min.js"></script>
 <script src="../static/assets/js/browser.min.js"></script>
 <script src="../static/assets/js/breakpoints.min.js"></script>
 <script src="../static/assets/js/util.js"></script>
