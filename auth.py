@@ -55,7 +55,7 @@ def login():
     last_name = JSON_object['user']['profile']['last_name']
     image_192 = JSON_object['user']['profile']['image_192']
     my_res = make_response(
-        render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192))
+        render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192, user_id=user_id))
 
     # post_message.dm(user_id, "Message here1234")  # user_id 다음의 인자 값으로 텍스트를 입력하면 슬랙 DM 으로 전송.
 
