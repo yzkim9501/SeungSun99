@@ -26,7 +26,7 @@ def study_create():
         level_receive = request.form['level-category']
         contents_receive = request.form['study-explain']
         time_receive = request.form['start-datetime']
-        tag_along_receive = request.form['join']
+        tag_along_receive = request.form['study-type2']
 
 
         doc = {
