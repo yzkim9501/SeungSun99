@@ -68,7 +68,13 @@ def study_update():
         return jsonify({'msg': '스터디 수정 완료!'})
 
 
+@bp.route('/api/study_delete', methods=["GET"])     # DELETE
+@login_required
+def study_delete():
+    title_receive = request.form['title']
+    db.study.delete_one({'title': title_receive})
 
+    return jsonify({'msg': '스터디 삭제 완료'})
 
 
 @bp.route('/api/study_list', methods=['GET'])   # READ
