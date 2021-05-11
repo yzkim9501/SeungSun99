@@ -219,20 +219,18 @@
                             <form method="post" action="#">
                                 <div class="row gtr-uniform">
                                     <div class="col-12 col-12-xsmall form-label">
-                                        <label for="study-name">스터디 이름 : </label>
-                                        <input type="text" id="study-name" name="study-name" value="" style="width: 80%"
-                                               placeholder=""/>
+                                        <input type="text" id="study-name" name="study-name" value=""
+                                               placeholder="스터디 이름" style="width: 90%;"/>
                                     </div>
-                                    <div style="margin:0;padding: 0 0 0 17%; float:right">
+                                    <div style="margin:0;padding: 0 0 0 10%; float:left">
                                         <p style="font-size: x-small;color:darkslateblue">(ex) 파이썬 알고리즘 스터디 모집합니다, 웹개발
                                             종합반 3주차부터 같이 달리실 분?, 매일 저녁 9시부터 Code with me!</p>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
-                                        <label for="datetimepicker1">스터디 시작 : </label>
-                                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest"
-                                             style="width: 70%">
+                                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="margin:0 0 0 5%;width:90%">
                                             <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#datetimepicker1" id="start-datetime" name="start-datetime">
+                                                   data-target="#datetimepicker1" id="start-datetime" name="start-datetime"
+                                            placeholder="스터디 시작일/시간">
                                             <div class="input-group-append" data-target="#datetimepicker1"
                                                  data-toggle="datetimepicker">
                                                 <div class="input-group-text">
@@ -241,13 +239,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 col-12-xsmall form-label">
-                                        <input type="checkbox" id="join" name="join">
-                                        <label for="join">중도 참여 가능 여부</label>
-                                    </div>
                                     <!-- Break -->
-                                    <div class="col-6 form-label">
-                                        <select name="level-category" id="study-level" style="width: 80%;">
+                                    <div class="col-4 form-label">
+                                        <select name="level-category" id="study-level" style="margin:0 10% 0 0;width:80%">
                                             <option value="">- 스터디 난이도 -</option>
                                             <option value="3">무관</option>
                                             <option value="2">하</option>
@@ -256,8 +250,13 @@
                                         </select>
                                     </div>
                                     <!-- Break -->
-                                    <div class="col-6 form-label">
-                                        <select name="study-type" id="study-type" style="width: 80%;">
+                                    <div class="col-4 form-label">
+                                        <input type="text" id="leader" name="leader" value="" style="margin:0 0 0 10%;width:80%"
+                                               placeholder="작성자" disabled/>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-4 form-label">
+                                        <select name="study-type" id="study-type" style="margin:0;width:100%">
                                             <option value="">- 스터디 방식 -</option>
                                             <option value="0">감시형</option>
                                             <option value="1">토이 프로젝트</option>
@@ -266,6 +265,10 @@
                                             <option value="4">알고리즘</option>
                                             <option value="9">기타(설명란 기재)</option>
                                         </select>
+                                    </div>
+                                    <div class="col-4 col-12-xsmall form-label" style="margin:0 0 0 0;width:80%">
+                                        <input type="checkbox" id="join" name="join">
+                                        <label for="join">중도 참여 가능 여부</label>
                                     </div>
                                     <!-- Break -->
                                     <div class="col-12 form-label">
