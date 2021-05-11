@@ -28,8 +28,16 @@ def study_create():
         time_receive = request.form['start-datetime']
         tag_along_receive = request.form['study-type2']
 
+        if db.board.count_documents({}) == 0:
+            index = 1
+        else:
+            data = list(db.board.find({}, {'_id': False}).sort('date', pymongo.DESCENDING).limit(1))
+            data1 = data[0]
+            index = data1['index'] + 1
+
 
         doc = {
+            'index': index,
             'leader_id': session['user_id'],
             'leader_name': session['user_name'],
             'study-name': title_receive,
