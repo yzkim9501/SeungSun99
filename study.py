@@ -20,19 +20,20 @@ def study():
 @login_required
 def study_create():
     if request.method == "POST":
-        title_receive = request.form['title']
+        title_receive = request.form['study-name']
         type_receive = request.form['study-type']
         level_receive = request.form['level-category']
-        contents_receive = request.form['contents']
+        contents_receive = request.form['study-explain']
+        time_receive = request.form['start-datetime']
 
         doc = {
             'leader_id': session['user_id'],
             'leader_name': session['user_name'],
-            'title': title_receive,
+            'study-name': title_receive,
             'study-type': type_receive,
             'level-category': level_receive,
-            'contents': contents_receive,
-            'date': time.strftime('%y-%m-%d %H:%M:%S'),
+            'study-explain': contents_receive,
+            'start-datetime': time_receive,
         }
 
         db.study.insert_one(doc)
