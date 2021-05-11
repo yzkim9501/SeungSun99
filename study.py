@@ -19,12 +19,15 @@ def study():
 @bp.route('/api/study', methods=["POST"])  # 스터디 생성 데이터 저장
 @login_required
 def study_create():
+    print(request.form)
     if request.method == "POST":
         title_receive = request.form['study-name']
         type_receive = request.form['study-type']
         level_receive = request.form['level-category']
         contents_receive = request.form['study-explain']
         time_receive = request.form['start-datetime']
+        tag_along_receive = request.form['join']
+
 
         doc = {
             'leader_id': session['user_id'],
@@ -34,6 +37,7 @@ def study_create():
             'level-category': level_receive,
             'study-explain': contents_receive,
             'start-datetime': time_receive,
+            'join': tag_along_receive,
         }
 
         db.study.insert_one(doc)
