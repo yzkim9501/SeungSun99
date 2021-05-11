@@ -46,8 +46,8 @@ def study_update():
         target_study = db.study.find_one({'title':title_receive})
 
         new_title = target_study['title']
-        new_study-type = target_study['study-type']
-        new_level-category = target_study['level-category']
+        new_study_type = target_study['study-type']
+        new_level_category = target_study['level-category']
         new_contents = target_study['contents']
         new_date = target_study['date']
 
@@ -55,8 +55,8 @@ def study_update():
         db.study.update_one(
             {'title': title_receive},
             {'$set': {'title': new_title,
-                      'study-type': new_study-type,
-                      'level-category': new_level-category,
+                      'study-type': new_study_type,
+                      'level-category': new_level_category,
                       'contents': new_contents,
                       'date': new_date}}
         )
