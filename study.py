@@ -71,7 +71,7 @@ def study_update():
 @bp.route('/api/study_delete', methods=["GET"])     # DELETE
 @login_required
 def study_delete():
-    title_receive = request.form.get['title']
+    title_receive = request.form.get('title')
     db.study.delete_one({'title': title_receive})
 
     return jsonify({'msg': '스터디 삭제 완료'})
