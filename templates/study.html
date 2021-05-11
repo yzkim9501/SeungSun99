@@ -220,7 +220,7 @@
                                 <div class="row gtr-uniform">
                                     <div class="col-12 col-12-xsmall form-label">
                                         <label for="study-name">스터디 이름 : </label>
-                                        <input type="text" id="study-name" value="" style="width: 80%"
+                                        <input type="text" id="study-name" name="study-name" value="" style="width: 80%"
                                                placeholder=""/>
                                     </div>
                                     <div style="margin:0;padding: 0 0 0 17%; float:right">
@@ -232,7 +232,7 @@
                                         <div class="input-group date" id="datetimepicker1" data-target-input="nearest"
                                              style="width: 70%">
                                             <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#datetimepicker1">
+                                                   data-target="#datetimepicker1" id="start-datetime" name="start-datetime">
                                             <div class="input-group-append" data-target="#datetimepicker1"
                                                  data-toggle="datetimepicker">
                                                 <div class="input-group-text">
@@ -242,7 +242,7 @@
                                         </div>
                                     </div>
                                     <div class="col-4 col-12-xsmall form-label">
-                                        <input type="checkbox" id="join">
+                                        <input type="checkbox" id="join" name="join">
                                         <label for="join">중도 참여 가능 여부</label>
                                     </div>
                                     <!-- Break -->
@@ -270,7 +270,7 @@
                                     <!-- Break -->
                                     <div class="col-12 form-label">
                                         <label for="study-explain"></label>
-                                        <textarea id="study-explain" placeholder="자세한 스터디 진행 방식을 공유해주세요."
+                                        <textarea id="study-explain" name="study-explain" placeholder="자세한 스터디 진행 방식을 공유해주세요."
                                                   rows="6" style="width: 90%;"></textarea>
                                     </div>
                                     <!-- Break -->
