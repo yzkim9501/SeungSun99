@@ -4,6 +4,7 @@ import post_message
 from auth import login_required
 import db
 import pymongo
+import time
 bp = Blueprint("study", __name__)
 
 db = db.get_db()
@@ -68,7 +69,7 @@ def exit_study():
     return jsonify({'msg': '삭제 완료'})
 
 
-@bp.route('/study', methods=['POST'])
+@bp.route('/api/dm_to_leader', methods=['POST'])
 @login_required
 def message_to_leader():
     if request.method == 'POST':
