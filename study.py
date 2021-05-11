@@ -35,15 +35,16 @@ def study_create():
 
         db.study.insert_one(doc)
 
+
         return jsonify({'msg': '스터디 생성 완료!'})
 
 
-@bp.route('/api/study', methods=["POST"])   # Update
+@bp.route('/api/study_update', methods=["POST"])   # Update
 @login_required
 def study_update():
     if request.method == "POST":
         title_receive = request.form['title']
-        target_study = db.study.find_one({'title':title_receive})
+        target_study = db.study.find_one({'title': title_receive})
 
         new_title = target_study['title']
         new_study_type = target_study['study-type']
@@ -63,6 +64,8 @@ def study_update():
 
 
         return jsonify({'msg': '스터디 수정 완료!'})
+
+
 
 
 
