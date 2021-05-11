@@ -43,7 +43,7 @@ def board_create():
                 'title': title,
                 'contents': contents,
                 'date': time.strftime('%y-%m-%d %H:%M:%S'),
-                'username': session['username']}
+                'username': session['user_name']}
         )
         db.board.insert_one(dic)
         return redirect('/board')
