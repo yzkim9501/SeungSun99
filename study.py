@@ -26,6 +26,8 @@ def study_create():
         contents_receive = request.form['contents']
 
         doc = {
+            'leader_id': session['user_id'],
+            'leader_name': session['user_name'],
             'title': title_receive,
             'study-type': type_receive,
             'level-category': level_receive,
@@ -102,7 +104,11 @@ def exit_study():
 def message_to_leader():
     if request.method == 'POST':
         id = request.form['user_name']  # 보내는 사람
+        study_id =  request.form['study_id']
         text = id + '님이 메세지 전송. \n' + request.form['to-leader']  # 메세지
+        receiver = db.study.find_one({'_id': study_id})
+        receiver = receiver['leader']
+
 
         post_message.dm(session['user_id'], text)
 
