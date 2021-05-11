@@ -1,13 +1,12 @@
 import pymongo
 
-from flask import Flask, Blueprint, render_template, jsonify, request, session
+from flask import Blueprint, render_template, jsonify, request, session
 import time
 import db  # db.py
 from auth import login_required
 
 db = db.get_db()
 bp = Blueprint('board', __name__) #Flask
-
 
 
 ##게시판 글의 CRUD기능 만들기
@@ -23,7 +22,7 @@ def board():
 @bp.route('/api/read_board', methods=['GET'])
 @login_required
 def read_board():
-    boards = list(db.board.find({}, {'_id': False}).sort('date',pymongo.descending))  ##에러인데 뭘 추가해야하는지 모르겠다.날짜로 sort?? 아니면 index로 sort? #datetime을 import해야함 '%Y/%m/%d %H:%M:%S'를 먼저 정의하나?
+    boards = list(db.board.find({}, {'_id': False}).sort("date",-1))  ##에러인데 뭘 추가해야하는지 모르겠다.날짜로 sort?? 아니면 index로 sort? #datetime을 import해야함 '%Y/%m/%d %H:%M:%S'를 먼저 정의하나?
     return jsonify({'all_boards': boards})
 
 
@@ -35,10 +34,20 @@ def create_board():
         post_title = request.form["post_title"]
         question_contents = request.form["question-content"]  ## 구글링으로 일단 넣었다 ,,,,
 
+        # (Create를 할때!)게시물 인덱싱 조건문 추가
+        if db.board.count_documents({}) == 0:  # board 테이블에 document 가 없으면
+            index = 1
+        else:  # document 가 있으면
+            data = list(db.board.find({}, {'_id': False}).sort('date', pymongo.DESCENDING).limit(
+                1))  ## 날짜로 내림차순, 가장 최근 생성된 도큐먼트 1개 선택
+            data1 = data[0]  ## 인덱스를 담고
+            index = data1['index'] + 1 ##인데스+1
+
+
         doc = ({
                    'index': index,  # 게시판 인덱스는 숫자로
-                   'title': title,
-                   'contents': contents,
+                   'title': post_title,
+                   'contents': question_contents,
                    'date': time.strftime('%y-%m-%d %H:%M:%S'), ##해결!
                    'user_id': session['user_id'],
                    'user_name': session['user_name'],  ## How? 유저아이디인지 유저이름인지 확인필요 따로따로 저장하고 표시는 이름으로
@@ -50,15 +59,16 @@ def create_board():
 
         return jsonify({'msg': '게시판에 글이 작성되었습니다.'})
 
-
-    ## (Delete) index를 받아서 get 방식으로 게시물 글 지우기!
+## if post-tilte == '빈 문자열' return ()
+## (Delete) index를 받아서 get 방식으로 게시물 글 지우기!
 
 @bp.route('/api/delete_board', methods=['GET'])
 @login_required
 def delete_board():
-    delete1: request.args.get('index')
-    db.board.delete_one({'index': 'delete1'})
+    delete1 = request.args.get('index')
+    db.board.delete_one({'index': delete1})
     return jsonify({'msg': '삭제되었습니다'})
     ##삭제시 비밀번호 필요한가?
     ##remove???
     ##게시글 수정도 하나..?
+
