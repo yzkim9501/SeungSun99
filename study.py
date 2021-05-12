@@ -195,4 +195,5 @@ def isthismine():
     st_id = request.form['study_index']
     u_id = session['user_id']
 
-    if db.join_member.find_one
+    if db.join_member.find_one:
+        pass
