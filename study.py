@@ -27,8 +27,12 @@ def study_create():
         contents_receive = request.form['study-explain']
         time_receive = request.form['start-datetime']
         tag_along_receive = request.form['study-type2']
+<<<<<<< HEAD
         status_receive = request.form['study-status']
         size_receive = request.form['study-size']
+=======
+        num_member = request.form['study-size']
+>>>>>>> 0bf9b06c3a4dd17bf271d2e834341565f3a0a07f
 
         if db.study.count_documents({}) == 0:
             index = 1
@@ -41,16 +45,21 @@ def study_create():
             '_id': index,
             'leader_id': session['user_id'],
             'leader_name': session['user_name'],
+            'num_member': num_member,
             'study-name': title_receive,
             'study-type': type_receive,
             'level-category': level_receive,
             'study-explain': contents_receive,
             'start-datetime': time_receive,
             'join': tag_along_receive,
+<<<<<<< HEAD
             'study-status': status_receive,
             'study-size': size_receive,
             'date': time.strftime('%y-%m-%d %H:%M:%S'),
 
+=======
+            'ooc': 1
+>>>>>>> 0bf9b06c3a4dd17bf271d2e834341565f3a0a07f
         }
 
         db.study.insert_one(doc)
@@ -109,18 +118,35 @@ def study_list():
     return jsonify({'study_list': study_list})
 
 
-@bp.route('/api/join_study')
+@bp.route('/api/join_study', methods=['POST'])
 @login_required
 def join_study():
-    dic = (
-        {
-            'user_id': session['user_id'],
-            'study_index': request.form['study_index']
-        }
-    )
-    db.join_member.insert_one(dic)
 
-    return jsonify({'msg': '스터디 참여 완료'})
+    if request.method == "POST":
+        dic = (
+            {
+                'user_id': session['user_id'],
+                'study_index': request.form['study_index']
+            }
+        )
+
+        data = list(db.study.find_one({'_id': request.form['study_index']}))
+        status = data[9]
+        occ_value = status['ooc']
+
+        num_member = data[3]
+        num = num_member['num_member']
+
+        if occ_value == 1:
+            db.join_member.insert_one(dic)
+
+            if db.join_member.count_document == num:
+                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'ooc': 0}})
+                post_message.db()
+
+            return jsonify({'msg': '스터디 참여 완료'})
+        else:
+            return jsonify({'msg': '참여 불가능'})
 
 
 @bp.route('/api/exit_study')
