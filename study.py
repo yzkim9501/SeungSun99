@@ -203,11 +203,10 @@ def isthismine():
 
     data = db.join_member.find_one({'study_index': st_id})
 
-    for i in data:
-        if i['user_id'] == u_id:
-            return jsonify({'msg': 'mine'})
-        else:
-            return jsonify({'msg': 'not mine'})
+    if data['user_id'] == u_id:
+        return jsonify({'msg': 'mine'})
+    else:
+        return jsonify({'msg': 'not mine'})
 
 
 
