@@ -166,7 +166,7 @@ def join_study():
 @login_required
 def exit_study():
     user_id = session['user_id']
-    study_index = request.args.get('study_index')
+    study_index = int(request.args.get('study_index'))
 
     data = db.join_member.find({'user_id': user_id})
 
@@ -194,12 +194,23 @@ def message_to_leader():
         return jsonify({'msg': '전송 실패'})
 
 
-@bp.route('/api/isthismine', methods=['GET'])
+@bp.route('/api/isthismine', methods=['GET'])  # 참가버튼 활성화
 @login_required
 def isthismine():
 
-    st_id = request.args.get('study_index')
+    st_id = int(request.args.get('study_index'))
     u_id = session['user_id']
+
+    data = db.join_member.find_one({'study_index': st_id})
+
+    for i in data:
+        if i['user_id'] == u_id:
+            return jsonify({'msg': 'mine'})
+        else:
+            return jsonify({'msg': 'not mine'})
+
+
+
 
     data = db.join_member.find_one({'study_index': st_id})
     if data['user_id'] == u_id:
