@@ -107,17 +107,28 @@ def study_delete():
 def study_list():
 
     page_num = int(request.args.get('pageNum'))
+    # sort_num = int(request.args.get('sortNum'))
+    sort_num = 0  # 임시 값
     isJoin = request.args.get('isJoin')
     total_doc = db.study.find({'study-status':isJoin}).count()
 
-    # page_num = 1  # 에러뜨면 일단 1로 설정하고 돌려보세요.
     if page_num == 1:
         skip_docs = 0
     else:
         skip_docs = (page_num-1) * 9
 
-    study_list = list(db.study.find({'study-status':isJoin}).sort('date', -1).skip(skip_docs).limit(9))
+    study_data = db.study.find({'study-status': isJoin}).sort('date', -1).skip(skip_docs).limit(9)
+    if sort_num == 0:  # 최신 순
+        pass
+    elif sort_num == 1:  # 오래된 순
+        study_data = study_data.sort('date', 1)
+    elif sort_num == 2:  # 인원 적은 순
+        pass
+    else:  # 인원 많은 순
+        pass
 
+    study_list = list(study_data)
+    print(study_list)
     return jsonify({'total': total_doc, 'study_list': study_list})
 
 
