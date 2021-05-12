@@ -52,6 +52,7 @@ def study_create():
             'study-size': num_member,
             'date': time.strftime('%y-%m-%d %H:%M:%S'),
             'ooc': 1,
+        }
 
 
         db.study.insert_one(doc)
