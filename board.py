@@ -38,14 +38,13 @@ def create_board():
         if db.board.count_documents({}) == 0:  # board 테이블에 document 가 없으면
             index = 1
         else:  # document 가 있으면
-            data = list(db.board.find({}, {'_id': False}).sort('date', pymongo.DESCENDING).limit(
-                1))  ## 날짜로 내림차순, 가장 최근 생성된 도큐먼트 1개 선택
+            data = list(db.board.find({}).sort('_id', pymongo.DESCENDING).limit(1))  ## 이제_id를 정렬기준으로 사용함. 가장 최근 생성된 도큐먼트 1개 선택
             data1 = data[0]  ## 인덱스를 담고
-            index = data1['index'] + 1 ##인데스+1
+            index = data1['_id'] + 1 ##인데스+1
 
 
         doc = ({
-                   'index': index,  # 게시판 인덱스는 숫자로
+                   '_id': index,  # 게시판 인덱스는 숫자로
                    'title': post_title,
                    'contents': question_contents,
                    'date': time.strftime('%y-%m-%d %H:%M:%S'), ##해결!

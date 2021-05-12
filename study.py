@@ -28,16 +28,15 @@ def study_create():
         time_receive = request.form['start-datetime']
         tag_along_receive = request.form['study-type2']
 
-        if db.board.count_documents({}) == 0:
+        if db.study.count_documents({}) == 0:
             index = 1
         else:
-            data = list(db.board.find({}, {'_id': False}).sort('date', pymongo.DESCENDING).limit(1))
+            data = list(db.study.find({}).sort('_id', pymongo.DESCENDING).limit(1))
             data1 = data[0]
-            index = data1['index'] + 1
-
+            index = data1['_id'] + 1
 
         doc = {
-            'index': index,
+            '_id': index,
             'leader_id': session['user_id'],
             'leader_name': session['user_name'],
             'study-name': title_receive,
@@ -93,7 +92,7 @@ def study_delete():
 @bp.route('/api/study_list', methods=['GET'])   # READ
 @login_required
 def study_list():
-    study_list = list(db.study.find({}, {'_id': False}).sort('date', -1))
+    study_list = list(db.study.find({}).sort('date', -1))
 
     return jsonify({'study_list': study_list})
 
