@@ -97,8 +97,8 @@ def study_update():
 @bp.route('/api/study_delete', methods=["GET"])     # DELETE
 @login_required
 def study_delete():
-    title_receive = request.form.get('title')
-    db.study.delete_one({'title': title_receive})
+    id_receive = request.args.get('id')
+    db.study.delete_one({'_id': int(id_receive)})
 
     return jsonify({'msg': '스터디 삭제 완료'})
 
@@ -114,9 +114,11 @@ def study_list():
 @bp.route('/api/study_target', methods=['GET'])   # 해당 스터디 정보만 가져오기
 @login_required
 def study_target():
-    study_target = list(db.study.find_one({}))
 
-    return jsonify({'study_target': study_target})
+    id_receive = request.args.get('id')
+    study_target=db.study.find_one({'_id': int(id_receive)})
+
+    return jsonify(study_target)
 
 
 @bp.route('/api/join_study', methods=['POST'])
@@ -175,9 +177,9 @@ def exit_study():
 def message_to_leader():
     if request.method == 'POST':
         user_name = request.form['user_name']  # 보내는 사람
-        study_id = request.form['study_id']
+        study_id = request.form['study-question-id']
         text = user_name + '님이 메세지 전송. \n' + request.form['to-leader']  # 메세지
-        receiver = db.study.find_one({'_id': study_id})
+        receiver = db.study.find_one({'_id': int(study_id)})
         receiver = receiver['leader_id']
 
         post_message.dm(receiver, text)
@@ -185,5 +187,7 @@ def message_to_leader():
         return jsonify({'msg': '메시지 전송됨.'})
     else:
         return jsonify({'msg': '전송 실패'})
+
+
 
 

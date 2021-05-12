@@ -64,7 +64,8 @@
         });
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
-            $(".modal-body #modal-card-id").val(cardId);
+            $(".modal-body #study-question-id").val(cardId);
+            $(".modal-body #user_id").val(user_id);
         });
 
         function showProfile() {
@@ -431,6 +432,7 @@
                         <div class="modal-body">
                             <form method="post" action="/api/study">
                                 <div class="row gtr-uniform">
+                                    <input type="hidden" id="study-id" value=""/>
                                     <div class="col-8 col-12-xsmall form-label">
                                         <input type="text" id="study-name2" name="study-name" value=""
                                                placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
@@ -534,12 +536,13 @@
                             <h4 class="modal-title">리더에게 질문하기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="#">
+                            <form method="post" action="/api/dm_to_leader">
                                 <div class="row gtr-uniform">
                                     <div class="col-12 form-label">
-                                        <input type="hidden" id="modal-card-id" value=""/>
-                                        <label for="question-content"></label>
-                                        <textarea id="question-content"
+                                        <input type="hidden" id="study-question-id" name="study-question-id" value=""/>
+                                        <input type="hidden" id="user_name" name="user_name" value=""/>
+                                        <label for="to-leader"></label>
+                                        <textarea id="to-leader" name="to-leader"
                                                   placeholder="리더에게 질문할 내용을 자세히 작성해주세요. &#13;&#10;답변은 리더가 직접 슬랙 메신저로 해주실거에요!"
                                                   rows="6" style="width: 90%;"></textarea>
                                     </div>
