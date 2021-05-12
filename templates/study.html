@@ -60,6 +60,7 @@
 
         $(document).ready(function () {
             showProfile();
+            $('#leader').val(user_name);
         });
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
@@ -119,19 +120,31 @@
             }).done(function (json) {
                 pagination(pageNum, 100);
                 showtabs(isJoin==1?true:false);
-                console.log(show_current);
                 var studys=json['study_list']
                 $('#card-box').empty();
                 for (var i = 0; i < studys.length; i++) {
+                    var level,type;
+                    if (studys[i]['level-category']==0) level='상';
+                    else if (studys[i]['level-category']==1) level='중';
+                    else if (studys[i]['level-category']==2) level='하';
+                    else level='무관';
+
+                    if (studys[i]['study-type']==0) type='감시형';
+                    else if (studys[i]['study-type']==1) type='토이 프로젝트';
+                    else if (studys[i]['study-type']==2) type='개인 프로젝트';
+                    else if (studys[i]['study-type']==3) type='독서실';
+                    else if (studys[i]['study-type']==4) type='알고리즘';
+                    else type='기타';
+
                     var to_html = `<div class="card" id="card-${i}" style="width: 100%;">
                     <div class="card-body" id="card-body-${i}">
-                        <h5 class="card-title">${studys[i]['title']}</h5>
-                        <p class="card-text">${studys[i]['contents']}<br>
-                        <strong style="color:#f56a6a">난이도</strong> : <span>${studys[i]['level-category']}</span> <strong style="color:#f56a6a">카테고리 </strong>: <span>${studys[i]['study-type']}</span><br>
+                        <h5 class="card-title">${studys[i]['study-name']}</h5>
+                        <p class="card-text">${studys[i]['study-explain']}<br>
+                        <strong style="color:#f56a6a">난이도</strong> : <span>${level}</span> <strong style="color:#f56a6a">카테고리 </strong>: <span>${type}</span><br>
                         </p>
                         <ul class="actions">
                             <li><a href="javascript:showStudyDetail(${i});" class="button primary">자세히 보기</a></li>
-                            <li><a data-toggle="modal" data-id="${i}" href="#leader-question" class="button primary open-reader-question">리더에게 질문하기</a></li>
+                            <li><a data-toggle="modal" data-id="${i}" href="#leader-question" class="button open-reader-question">리더에게 질문하기</a></li>
                         </ul>
                     </div>
                 </div>`
@@ -494,10 +507,14 @@
                                     <!-- Break -->
                                     <div class="col-12">
                                         <ul class="actions">
-                                            <li><input type="submit" class="button primary small fit" value="Save"/>
+                                           <li><button class="button primary small fit"
+                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()">참가</button></li>
+                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="수정"/>
+                                            <li><button class="button primary small fit"
+                                                       data-dismiss="modal" id="del-button" onclick="delStudy()">삭제</button></li>
                                             </li>
                                             <li><input type="button" class="button primary small fit"
-                                                       data-dismiss="modal" value="Close"/></li>
+                                                       data-dismiss="modal" value="닫기"/></li>
                                         </ul>
                                     </div>
                                 </div>
