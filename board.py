@@ -22,8 +22,16 @@ def board():
 @bp.route('/api/read_board', methods=['GET'])
 @login_required
 def read_board():
-    boards = list(db.board.find({}, {'_id': False}).sort("date",-1))  ##에러인데 뭘 추가해야하는지 모르겠다.날짜로 sort?? 아니면 index로 sort? #datetime을 import해야함 '%Y/%m/%d %H:%M:%S'를 먼저 정의하나?
-    return jsonify({'all_boards': boards})
+    total_docs = db.board.count_documents({})
+    page_num = int(request.args.get('pageNum'))
+
+    if page_num == 1:
+        skip_docs = 0
+    else:
+        skip_docs = (page_num-1) * 10
+
+    boards = list(db.board.find({}, {'_id': False}).sort("date",-1).skip(skip_docs).limit(10))  ##에러인데 뭘 추가해야하는지 모르겠다.날짜로 sort?? 아니면 index로 sort? #datetime을 import해야함 '%Y/%m/%d %H:%M:%S'를 먼저 정의하나?
+    return jsonify({'total': total_docs, 'all_boards': boards})
 
 
 ## (Create & Update) API 역할을 하는 부분  (이 부분 조언 구하기)
