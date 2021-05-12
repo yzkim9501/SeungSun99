@@ -22,15 +22,15 @@ def board():
 @bp.route('/api/read_board', methods=['GET'])
 @login_required
 def read_board():
-    total_docs = db.board.count_documents({})
-    page_num = int(request.args.get('pageNum'))
+    total_docs = db.board.count_documents({}) ##total 갯수만.
+    page_num = int(request.args.get('pageNum')) ##pageNum변수는 html에서 불러와서 그 값을 page_num에 넣음.
 
-    if page_num == 1:
-        skip_docs = 0
+    if page_num == 1: ##page가 1일때
+        skip_docs = 0 ##skip해야할 파일은 0개
     else:
-        skip_docs = (page_num-1) * 10
+        skip_docs = (page_num-1) * 10 ## page 2를 불러올때, 앞의 10개는 skip하고 뒤의 10개를 불러옴.
 
-    boards = list(db.board.find({}, {'_id': False}).sort("date",-1).skip(skip_docs).limit(10))  ##에러인데 뭘 추가해야하는지 모르겠다.날짜로 sort?? 아니면 index로 sort? #datetime을 import해야함 '%Y/%m/%d %H:%M:%S'를 먼저 정의하나?
+    boards = list(db.board.find({}).sort("date",-1).skip(skip_docs).limit(10))  ##에러인데 뭘 추가해야하는지 모르겠다.날짜로 sort?? 아니면 index로 sort? #datetime을 import해야함 '%Y/%m/%d %H:%M:%S'를 먼저 정의하나?
     return jsonify({'total': total_docs, 'all_boards': boards})
 
 
@@ -41,7 +41,7 @@ def create_board():
     print(request.form)
     if request.method == "POST":
         title = request.form["post-name"]
-        question_content = request.form["post-content"]  ## 구글링으로 일단 넣었다 ,,,,
+        question_content = request.form["post-content"]  ## 구글링으로 일단 넣어봄
 
         # (Create를 할때!)게시물 인덱싱 조건문 추가
         if db.board.count_documents({}) == 0:  # board 테이블에 document 가 없으면
@@ -62,7 +62,6 @@ def create_board():
         })
         db.board.update_one({}, {'$set': {'index': +1}})
         ##업데이트시, 1)정보를 불러와야함 2)새로 입력한 값으로 바꿈.
-        ## 오후 할일 1순위 다시 찾아보자
         db.board.insert_one(doc)
 
         return jsonify({'msg': '게시판에 글이 작성되었습니다.'})
@@ -74,9 +73,19 @@ def create_board():
 @login_required
 def delete_board():
     delete1 = request.args.get('index')
-    db.board.delete_one({'index': delete1})
+    db.board.delete_one({'_id': int(delete1)})
     return jsonify({'msg': '삭제되었습니다'})
     ##삭제시 비밀번호 필요한가?
     ##remove???
     ##게시글 수정도 하나..?
 
+
+##(find 사용) [게시판 목록을 조회할때 볼 수 있는 화면]을 부르는 기능
+##인덱스, 제목, 작성자, 작성일 중 index를 기준으로 작성
+##게시판의 해당 글(특정 글)을 불러오는 것 ! (study.py의 study_target참조)
+@bp.route('/api/board_target', methods=['GET'])
+@login_required
+def board_target():
+    target = request.args.get('index')
+    board_target = db.board.find_one({'_id': int(target)}) ##int와 같이 알고 있는 부분도 구현할 수 있도록 해보자
+    return jsonify(board_target)
