@@ -169,16 +169,22 @@
                         <div class="modal-body">
                             <form method="post" action="#">
                                 <div class="row gtr-uniform">
-                                    <div class="col-12 form-label">
-                                        <input type="text" id="post-name" name="post-name" value="" style="width: 90%"
+                                    <div class="col-8 form-label">
+                                        <input type="text" id="post-name" name="post-name" value="" style="margin:0;"
                                                placeholder="제목을 입력해주세요."/>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-4 form-label">
+                                        <input type="text" id="leader" name="leader" value=""
+                                               style="margin:0 1em 0 0;"
+                                               placeholder="작성자" disabled/>
                                     </div>
                                     <div class="col-12 form-label">
                                         <input type="hidden" id="modal-card-id" value=""/>
                                         <label for="post-content"></label>
                                         <textarea id="post-content" name="post-content"
                                                   placeholder="내용을 입력해주세요."
-                                                  rows="6" style="width: 90%;"></textarea>
+                                                  rows="6" style="margin:0 1em 0 0;"></textarea>
                                     </div>
                                     <div class="col-12">
                                         <ul class="actions">

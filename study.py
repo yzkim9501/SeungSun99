@@ -132,21 +132,17 @@ def join_study():
             }
         )
 
-        data = list(db.study.find_one({'_id': request.form['study_index']}))  # _id로 스터디 도큐먼트 검색.
-        status = data[9]
-        occ_value = status['ooc']
+        data = db.study.find_one({'_id': int(request.args.get('study_index'))})  # _id로 스터디 도큐먼트 검색.
+        study_status = int(data['study-status'])
 
-        num_member = data[3]
-        num = num_member['study-size']
+        num = data['study-size']
 
-        leader_id = data[2]
-        leader_id2 = leader_id['_id']
-
-        if occ_value == 1:
+        leader_id = data['leader_id']
+        if study_status == 1:
             db.join_member.insert_one(dic)
 
             if db.join_member.count_document == num:  # 스터디정원 꽉 찼을 때.
-                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'ooc': 0}})  # ooc 0으로 업데이트
+                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'study-status': 0}})  # ooc 0으로 업데이트
 
                 msg = "참가인원 full, 참가자: "
 
@@ -155,26 +151,25 @@ def join_study():
                     u_id = mem[0]  # user_id
                     u_name = db.user_info.find_one({'user_id': u_id})[1]  # user_name
                     msg = msg + u_name + " "
-                post_message.db(leader_id2, msg)
+                post_message.db(leader_id, msg)
 
-            return jsonify({'msg': '스터디 참여 완료'})
+            return jsonify({'msg': '스터디에 참여 완료하였습니다.'})
         else:
-            return jsonify({'msg': '참여 불가능'})
+            return jsonify({'msg': '현재 모집중이지 않거나, 신청 인원이 마감된 스터디입니다.'})
 
 
 @bp.route('/api/exit_study')
 @login_required
 def exit_study():
     user_id = session['user_id']
-    study_index = int(request.args.get('study_index'))
+    study_index = request.args.get('study_index')
 
     data = db.join_member.find({'user_id': user_id})
-
     for i in data:
         if i['study_index'] == study_index:
             db.join_member.delete_one({'_id': i['_id']})
 
-    return jsonify({'msg': '삭제 완료'})
+    return jsonify({'msg': '스터디 신청 취소가 완료되었습니다.'})
 
 
 @bp.route('/api/dm_to_leader', methods=['POST'])
@@ -183,36 +178,28 @@ def message_to_leader():
     if request.method == 'POST':
         user_name = request.form['user_name']  # 보내는 사람
         study_id = request.form['study-question-id']
-        text = user_name + '님이 메세지 전송. \n' + request.form['to-leader']  # 메세지
+
+        print(user_name)
+        print(study_id)
+        text = user_name + '님이 메세지를 전송하였습니다. \n' + request.form['to-leader']  +'\n이 대화의 답장이 아닌, 질문자분께 직접 dm해주세요!'# 메세지
         receiver = db.study.find_one({'_id': int(study_id)})
         receiver = receiver['leader_id']
 
         post_message.dm(receiver, text)
 
-        return jsonify({'msg': '메시지 전송됨.'})
-    else:
-        return jsonify({'msg': '전송 실패'})
+    return redirect(request.referrer)
 
 
 @bp.route('/api/isthismine', methods=['GET'])  # 참가버튼 활성화
 @login_required
 def isthismine():
 
-    st_id = int(request.args.get('study_index'))
+    st_id = request.args.get('study_index')
     u_id = session['user_id']
 
-    data = db.join_member.find_one({'study_index': st_id})
+    datas = list(db.join_member.find({'study_index': st_id}))
+    for data in datas:
+        if data['user_id'] == u_id:
+            return jsonify({'msg': 'true'})
 
-    if data['user_id'] == u_id:
-        return jsonify({'msg': 'mine'})
-    else:
-        return jsonify({'msg': 'not mine'})
-
-
-
-
-    data = db.join_member.find_one({'study_index': st_id})
-    if data['user_id'] == u_id:
-        return jsonify({'msg': '권한승인'})
-    else:
-        return jsonify({'msg': '권한거부'})
+    return jsonify({'msg': 'false'})

@@ -64,8 +64,9 @@
         });
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
+            console.log(user_name)
             $(".modal-body #study-question-id").val(cardId);
-            $(".modal-body #user_id").val(user_id);
+            $(".modal-body #user_name").val(user_name);
         });
 
         function showProfile() {
@@ -104,6 +105,32 @@
                     $('#del-button').attr('disabled',false)
                 } else{
                     //여기서 유저가 스터디에 가입되어있는지 판단 후에 버튼 텍스트를 참가/취소로 변경
+
+                    $('#study-name2').attr('disabled',true)
+                    $('#start-datetime2').attr('disabled',true);
+                    $('#study-level2').attr('disabled',true);
+                    $('#leader2').attr('disabled',true);
+                    $('#study-type2').attr('disabled',true);
+                    $('#join2').attr('disabled',true);
+                    $('#study-explain2').attr('disabled',true);
+                    $('#study-size2').attr('disabled',true);
+                    $('#study-status2').attr('disabled',true);
+                    $.ajax({
+                        url: "/api/isthismine?study_index="+json['_id'], // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                        data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                        dataType: "json", // 서버에서 보내줄 데이터의 타입
+                        async: false
+                    }).done(function (json) {
+                        if(json['msg']=="true"){
+                            console.log(json)
+                            $('#join-button').html('신청 취소');
+                        } else
+                            $('#join-button').html('신청');
+                    }).fail(function (xhr, status, errorThrown) {
+                        alert(errorThrown);
+                    })
+
                     $('#join-button').attr('disabled',false)
                     $('#mod-button').attr('disabled',true)
                     $('#del-button').attr('disabled',true)
@@ -112,7 +139,6 @@
                 alert(errorThrown);
             })
 
-            //작성자가 수정버튼을 클릭하면 모든 입력폼 enable하고 저장버튼
         }
 
         function showStudyList(pageNum,isJoin) {
@@ -142,7 +168,7 @@
                     else if (studys[i]['study-type']==4) type='알고리즘';
                     else type='기타';
 
-                    var to_html = `<div class="card" id="card-${id}" style="width: 100%;">
+                    var to_html = `<div class="card" id="card-${id}" style="width: 100%;text-align:center;display:inline-block;">
                     <div class="card-body" id="card-body-${id}">
                         <h5 class="card-title">${studys[i]['study-name']}</h5>
                         <p class="card-text">${studys[i]['study-explain']}<br>
@@ -235,7 +261,31 @@
         }
         function joinStudy() {
             var studyId=$('#study-id').val();
-            //여기에 userId 달아서 API 보내기
+            if ($('#join-button').html()=="신청"){
+                $.ajax({
+                    url: "/api/join_study?study_index="+studyId, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                    data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                    method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                    dataType: "json", // 서버에서 보내줄 데이터의 타입
+                    async: false
+                }).done(function (json) {
+                    alert(json['msg']);
+                }).fail(function (xhr, status, errorThrown) {
+                    alert(errorThrown);
+                })
+            } else{
+                $.ajax({
+                    url: "/api/exit_study?study_index="+studyId, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                    data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                    method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                    dataType: "json", // 서버에서 보내줄 데이터의 타입
+                    async: false
+                }).done(function (json) {
+                    alert(json['msg']);
+                }).fail(function (xhr, status, errorThrown) {
+                    alert(errorThrown);
+                })
+            }
         }
 
         function delStudy() {
@@ -273,10 +323,6 @@
             align-items: center
         }
 
-        .card-columns {
-            display: hidden;
-        }
-
         .study-view-detail {
             cursor: pointer;
         }
@@ -288,6 +334,7 @@
         }
         .selected-tab:hover{
             background-color: white;
+            color:#f56a6a;
         }
 
         .unselected-tab{
@@ -297,6 +344,7 @@
         }
         .unselected-tab:hover{
             background-color: #ffe0e0;
+            color:#f56a6a;
             border:2px solid #f56a6a;
         }
     </style>
@@ -343,7 +391,7 @@
                             <h4 class="modal-title">스터디원 모집하기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/study">
+                            <form method="post" action="/api/study" onsubmit="alert('스터디가 추가되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <div class="col-8 col-12-xsmall form-label">
                                         <input type="text" id="study-name" name="study-name" value=""
@@ -407,8 +455,8 @@
                                     <div class="col-3 form-label">
                                         <select name="study-status" id="study-status" style="margin:0 1em 0 0;">
                                             <option value="">- 모집 상태 -</option>
-                                            <option value="0">모집 중</option>
-                                            <option value="1">모집 종료</option>
+                                            <option value="1">모집 중</option>
+                                            <option value="0">모집 종료</option>
                                         </select>
                                     </div>
                                     <!-- Break -->
@@ -445,7 +493,7 @@
                             <h4 class="modal-title">스터디 자세히 보기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/study_update">
+                            <form method="post" action="/api/study_update" onsubmit="alert('스터디 내용이 수정되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <input type="hidden" name="study-id" id="study-id" value=""/>
                                     <div class="col-8 col-12-xsmall form-label">
@@ -510,8 +558,8 @@
                                     <div class="col-3 form-label">
                                         <select name="study-status" id="study-status2" style="margin:0 1em 0 0;">
                                             <option value="">- 모집 상태 -</option>
-                                            <option value="0">모집 중</option>
-                                            <option value="1">모집 종료</option>
+                                            <option value="1">모집 중</option>
+                                            <option value="0">모집 종료</option>
                                         </select>
                                     </div>
                                     <!-- Break -->
@@ -525,7 +573,7 @@
                                     <div class="col-12">
                                         <ul class="actions">
                                            <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()">참가</button></li>
+                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()"></button></li>
                                             <li><input type="submit" class="button primary small fit" id="mod-button" value="수정"/>
                                             <li><button class="button primary small fit"
                                                        data-dismiss="modal" id="del-button" onclick="delStudy()">삭제</button></li>
@@ -551,7 +599,7 @@
                             <h4 class="modal-title">리더에게 질문하기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/dm_to_leader">
+                            <form method="post" action="/api/dm_to_leader" onsubmit="alert('메시지가 성공적으로 전송되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <div class="col-12 form-label">
                                         <input type="hidden" id="study-question-id" name="study-question-id" value=""/>
