@@ -124,7 +124,7 @@ def study_target():
 @login_required
 def join_study():
 
-    if request.method == "POST":
+    if request.method == "GET":
         dic = (
             {
                 'user_id': session['user_id'],
