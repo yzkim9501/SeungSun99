@@ -166,7 +166,13 @@ def join_study():
 @login_required
 def exit_study():
     user_id = session['user_id']
-    db.join_member.delete_one({'user_id': user_id})
+    study_index = request.args.get('study_index')
+
+    data = db.join_member.find({'user_id': user_id})
+
+    for i in data:
+        if i['study_index'] == study_index:
+            db.join_member.delete_one({'_id': i['_id']})
 
     return jsonify({'msg': '삭제 완료'})
 
