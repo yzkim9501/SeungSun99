@@ -111,6 +111,14 @@ def study_list():
     return jsonify({'study_list': study_list})
 
 
+@bp.route('/api/study_target', methods=['GET'])   # 해당 스터디 정보만 가져오기
+@login_required
+def study_target():
+    study_target = list(db.study.find_one({}))
+
+    return jsonify({'study_target': study_target})
+
+
 @bp.route('/api/join_study', methods=['POST'])
 @login_required
 def join_study():
