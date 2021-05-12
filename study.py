@@ -123,19 +123,30 @@ def join_study():
             }
         )
 
-        data = list(db.study.find_one({'_id': request.form['study_index']}))
+        data = list(db.study.find_one({'_id': request.form['study_index']}))  # _id로 스터디 도큐먼트 검색.
         status = data[9]
         occ_value = status['ooc']
 
         num_member = data[3]
-        num = num_member['num_member']
+        num = num_member['study-size']
+
+        leader_id = data[2]
+        leader_id2 = leader_id['_id']
 
         if occ_value == 1:
             db.join_member.insert_one(dic)
 
-            if db.join_member.count_document == num:
-                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'ooc': 0}})
-                post_message.db()
+            if db.join_member.count_document == num:  # 스터디정원 꽉 찼을 때.
+                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'ooc': 0}})  # ooc 0으로 업데이트
+
+                msg = "참가인원 full, 참가자: "
+
+                st_mem = list(db.join_member.find({'study_index': request.form['study_index']}))
+                for mem in st_mem:
+                    u_id = mem[0]  # user_id
+                    u_name = db.user_info.find_one({'user_id': u_id})[1]  # user_name
+                    msg = msg + u_name + " "
+                post_message.db(leader_id2, msg)
 
             return jsonify({'msg': '스터디 참여 완료'})
         else:
