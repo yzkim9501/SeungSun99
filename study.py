@@ -128,7 +128,7 @@ def join_study():
         dic = (
             {
                 'user_id': session['user_id'],
-                'study_index': request.form['study_index']
+                'study_index': request.args.get('study_index')
             }
         )
 
@@ -192,7 +192,7 @@ def message_to_leader():
 @login_required
 def isthismine():
 
-    st_id = request.form['study_index']
+    st_id = request.args.get('study_index')
     u_id = session['user_id']
 
     data = db.join_member.find_one({'study_index': st_id})
