@@ -188,7 +188,7 @@ def message_to_leader():
         return jsonify({'msg': '전송 실패'})
 
 
-@bp.route('/api/isthismine', methods=['POST'])
+@bp.route('/api/isthismine', methods=['GET'])
 @login_required
 def isthismine():
 
