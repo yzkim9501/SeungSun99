@@ -120,7 +120,7 @@ def study_target():
     return jsonify(study_target)
 
 
-@bp.route('/api/join_study', methods=['POST'])
+@bp.route('/api/join_study', methods=['GET'])
 @login_required
 def join_study():
 
