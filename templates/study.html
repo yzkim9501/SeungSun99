@@ -143,18 +143,18 @@
 
         function showStudyList(pageNum,isJoin) {
             $.ajax({
-                url: "/api/study_list?pageNum="+pageNum, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                url: "/api/study_list?pageNum="+pageNum+"&isJoin="+isJoin, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
                 data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
                 method: "GET", // HTTP 요청 메소드(GET, POST 등)
                 dataType: "json", // 서버에서 보내줄 데이터의 타입
                 async: false
             }).done(function (json) {
-                pagination(pageNum, 100);
+                pagination(pageNum, json['total']);
                 showtabs(isJoin==1?true:false);
                 var studys=json['study_list']
                 $('#card-box').empty();
                 for (var i = 0; i < studys.length; i++) {
-                    var level,type;
+                    var name,explain,level,type;
                     var id=studys[i]['_id']
                     if (studys[i]['level-category']==0) level='상';
                     else if (studys[i]['level-category']==1) level='중';
@@ -168,11 +168,17 @@
                     else if (studys[i]['study-type']==4) type='알고리즘';
                     else type='기타';
 
-                    var to_html = `<div class="card" id="card-${id}" style="width: 100%;text-align:center;display:inline-block;">
-                    <div class="card-body" id="card-body-${id}">
-                        <h5 class="card-title">${studys[i]['study-name']}</h5>
-                        <p class="card-text">${studys[i]['study-explain']}<br>
-                        <strong style="color:#f56a6a">난이도</strong> : <span>${level}</span> <strong style="color:#f56a6a">카테고리 </strong>: <span>${type}</span><br>
+                    if(studys[i]['study-name'].length>=30){
+                        name=studys[i]['study-name'].slice(0,27)+'...';
+                    } else name=studys[i]['study-name']
+                    if(studys[i]['study-explain'].length>=60){
+                        explain=studys[i]['study-explain'].slice(0,57)+'...';
+                    }else explain=studys[i]['study-explain']
+                    var to_html = `<div class="card card-block col-md-4" id="card-${id}" style="width: 100%;border:none;">
+                    <div class="card-body" id="card-body-${id}" style="margin-top:0.5em;padding-bottom:0em;border:1px solid rgba(0,0,0,.125);border-radius:.25rem;text-align: center">
+                        <h5 class="card-title">${name}</h5>
+                        <p class="card-text">${explain}<br>
+                        <strong style="color:#f56a6a">난이도</strong> : <span>${level}</span><br> <strong style="color:#f56a6a">카테고리 </strong>: <span>${type}</span><br>
                         </p>
                         <ul class="actions">
                             <li><a href="javascript:showStudyDetail(${id});" class="button primary">자세히 보기</a></li>
@@ -573,7 +579,7 @@
                                     <div class="col-12">
                                         <ul class="actions">
                                            <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()"></button></li>
+                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()">신청</button></li>
                                             <li><input type="submit" class="button primary small fit" id="mod-button" value="수정"/>
                                             <li><button class="button primary small fit"
                                                        data-dismiss="modal" id="del-button" onclick="delStudy()">삭제</button></li>
@@ -627,7 +633,7 @@
             <!-- 스터디 탭 -->
             <ul class="nav nav-pills nav-fill" id="study-tab" style="margin-bottom: 2em"></ul>
             <!-- 스터디 카드 -->
-            <div class="card-columns" id="card-box"></div>
+            <div class="d-flex flex-row flex-wrap" id="card-box"></div>
             <!-- 페이지 -->
             <ul class="pagination" id="pagination"></ul>
 
