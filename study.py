@@ -195,5 +195,8 @@ def isthismine():
     st_id = request.form['study_index']
     u_id = session['user_id']
 
-    if db.join_member.find_one:
-        pass
+    data = db.join_member.find_one({'study_index'})
+    if data['user_id'] == u_id:
+        return jsonify({'msg': '권한승인'})
+    else:
+        return jsonify({'msg': '권한거부'})
