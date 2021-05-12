@@ -27,6 +27,8 @@ def study_create():
         contents_receive = request.form['study-explain']
         time_receive = request.form['start-datetime']
         tag_along_receive = request.form['study-type2']
+        status_receive = request.form['study-status']
+        size_receive = request.form['study-size']
 
         if db.study.count_documents({}) == 0:
             index = 1
@@ -45,6 +47,10 @@ def study_create():
             'study-explain': contents_receive,
             'start-datetime': time_receive,
             'join': tag_along_receive,
+            'study-status': status_receive,
+            'study-size': size_receive,
+            'date': time.strftime('%y-%m-%d %H:%M:%S'),
+
         }
 
         db.study.insert_one(doc)
@@ -57,23 +63,29 @@ def study_create():
 @login_required
 def study_update():
     if request.method == "POST":
-        title_receive = request.form['title']
-        target_study = db.study.find_one({'title': title_receive})
+        title_receive = request.form['study-name']
+        target_study = db.study.find_one({'study-name': title_receive})
 
-        new_title = target_study['title']
+        new_title = target_study['study-name']
         new_study_type = target_study['study-type']
         new_level_category = target_study['level-category']
-        new_contents = target_study['contents']
-        new_date = target_study['date']
+        new_contents = target_study['study-explain']
+        new_date = target_study['start-datetime']
+        new_status = target_study['study-status']
+        new_size = target_study['study-size']
+        new_tag_along = target_study['join']
 
 
         db.study.update_one(
             {'title': title_receive},
-            {'$set': {'title': new_title,
+            {'$set': {'study-name': new_title,
                       'study-type': new_study_type,
                       'level-category': new_level_category,
-                      'contents': new_contents,
-                      'date': new_date}}
+                      'study-explain': new_contents,
+                      'start-datetime': new_date,
+                      'study-status': new_status,
+                      'study-size': new_size,
+                      'join': new_tag_along}}
         )
 
 
