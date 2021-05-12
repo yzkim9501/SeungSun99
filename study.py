@@ -107,7 +107,7 @@ def study_delete():
 def study_list():
 
     total_doc = db.study.count_documents
-    page_num = request.args.get('pageNum')
+    page_num = int(request.args.get('pageNum'))
     # page_num = 1  # 에러뜨면 일단 1로 설정하고 돌려보세요.
     if page_num == 1:
         skip_docs = 0
