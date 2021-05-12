@@ -1,4 +1,4 @@
-from flask import Blueprint, session, request, render_template, jsonify
+from flask import Blueprint, session, request, render_template, jsonify, redirect
 
 import post_message
 from auth import login_required
@@ -26,7 +26,7 @@ def study_create():
         level_receive = request.form['level-category']
         contents_receive = request.form['study-explain']
         time_receive = request.form['start-datetime']
-        tag_along_receive = request.form['study-type2']
+        tag_along_receive = request.form['join']
         status_receive = request.form['study-status']
         num_member = request.form['study-size']
 
@@ -57,7 +57,7 @@ def study_create():
         db.study.insert_one(doc)
 
 
-        return jsonify({'msg': '스터디 생성 완료!'})
+        return redirect(request.referrer)
 
 
 @bp.route('/api/study_update', methods=["POST"])   # Update
@@ -90,7 +90,7 @@ def study_update():
         )
 
 
-        return jsonify({'msg': '스터디 수정 완료!'})
+        return redirect(request.referrer)
 
 
 @bp.route('/api/study_delete', methods=["GET"])     # DELETE
