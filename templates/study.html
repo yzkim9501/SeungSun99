@@ -80,20 +80,24 @@
             $('#study-view').modal('show');
             //모든 입력폼 disable하고, 작성자면 수정/삭제/닫기버튼. 작성자가 아니면 신청/닫기버튼 표출
             $.ajax({
-                url: "/api/study_list?id="+studyIdx, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                url: "/api/study_target?id="+studyIdx, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
                 data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
                 method: "GET", // HTTP 요청 메소드(GET, POST 등)
                 dataType: "json", // 서버에서 보내줄 데이터의 타입
                 async: false
             }).done(function (json) {
-                $('#study-name2').val(json['title']);
-                $('#start-datetime2').val(json['date']);
-                $('#level-category2').val(json['level-category']);
+                $('#study-name2').val(json['study-name']);
+                $('#start-datetime2').val(json['start-datetime']);
+                $('#study-level2').val(json['level-category']).change();
                 $('#leader2').val(json['leader_name']);
-                $('#study-type2').val(json['study-type']);
-                $('#study-explain2').val(json['contents']);
-                $('#join2').val(json['join']);
-                $('#study-id').val(json['study-id']);
+                $('#study-type2').val(json['study-type']).change();
+                $('#join2').val(json['join']).change();
+                $('#study-explain2').val(json['study-explain']);
+                $('#study-size2').val(json['study-size']);
+                $('#study-status2').val(json['study-status']).change();
+                $('#study-id').val(json['_id']);
+                console.log(user_id);
+                console.log(json['leader_id']);
                 if(user_id==json['leader_id']){
                     $('#join-button').attr('disabled',true)
                     $('#mod-button').attr('disabled',false)
@@ -125,6 +129,7 @@
                 $('#card-box').empty();
                 for (var i = 0; i < studys.length; i++) {
                     var level,type;
+                    var id=studys[i]['_id']
                     if (studys[i]['level-category']==0) level='상';
                     else if (studys[i]['level-category']==1) level='중';
                     else if (studys[i]['level-category']==2) level='하';
@@ -137,15 +142,15 @@
                     else if (studys[i]['study-type']==4) type='알고리즘';
                     else type='기타';
 
-                    var to_html = `<div class="card" id="card-${i}" style="width: 100%;">
-                    <div class="card-body" id="card-body-${i}">
+                    var to_html = `<div class="card" id="card-${id}" style="width: 100%;">
+                    <div class="card-body" id="card-body-${id}">
                         <h5 class="card-title">${studys[i]['study-name']}</h5>
                         <p class="card-text">${studys[i]['study-explain']}<br>
                         <strong style="color:#f56a6a">난이도</strong> : <span>${level}</span> <strong style="color:#f56a6a">카테고리 </strong>: <span>${type}</span><br>
                         </p>
                         <ul class="actions">
-                            <li><a href="javascript:showStudyDetail(${i});" class="button primary">자세히 보기</a></li>
-                            <li><a data-toggle="modal" data-id="${i}" href="#leader-question" class="button open-reader-question">리더에게 질문하기</a></li>
+                            <li><a href="javascript:showStudyDetail(${id});" class="button primary">자세히 보기</a></li>
+                            <li><a data-toggle="modal" data-id="${id}" href="#leader-question" class="button open-reader-question">리더에게 질문하기</a></li>
                         </ul>
                     </div>
                 </div>`
@@ -383,7 +388,7 @@
                                         </select>
                                     </div>
                                     <div class="col-3 form-label">
-                                        <select name="study-type2" id="study-type2" style="margin:0;">
+                                        <select name="join" id="join" style="margin:0;">
                                             <option value="">- 중도 참여 가능 여부 -</option>
                                             <option value="0">가능</option>
                                             <option value="1">불가</option>
@@ -430,9 +435,9 @@
                             <h4 class="modal-title">스터디 자세히 보기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/study">
+                            <form method="post" action="/api/study_update">
                                 <div class="row gtr-uniform">
-                                    <input type="hidden" id="study-id" value=""/>
+                                    <input type="hidden" name="study-id" id="study-id" value=""/>
                                     <div class="col-8 col-12-xsmall form-label">
                                         <input type="text" id="study-name2" name="study-name" value=""
                                                placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
@@ -486,7 +491,7 @@
                                         </select>
                                     </div>
                                     <div class="col-3 form-label">
-                                        <select name="study-type2" id="study-type22" style="margin:0;">
+                                        <select name="join" id="join2" style="margin:0;">
                                             <option value="">- 중도 참여 가능 여부 -</option>
                                             <option value="0">가능</option>
                                             <option value="1">불가</option>

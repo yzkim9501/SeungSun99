@@ -63,22 +63,22 @@ def study_create():
 @bp.route('/api/study_update', methods=["POST"])   # Update
 @login_required
 def study_update():
+    print(request.form)
     if request.method == "POST":
-        title_receive = request.form['study-name']
-        target_study = db.study.find_one({'study-name': title_receive})
+        id_receive = request.form.get('study-id')
 
-        new_title = target_study['study-name']
-        new_study_type = target_study['study-type']
-        new_level_category = target_study['level-category']
-        new_contents = target_study['study-explain']
-        new_date = target_study['start-datetime']
-        new_status = target_study['study-status']
-        new_size = target_study['study-size']
-        new_tag_along = target_study['join']
+        new_title = request.form['study-name']
+        new_study_type = request.form['study-type']
+        new_level_category = request.form['level-category']
+        new_contents = request.form['study-explain']
+        new_date = request.form['start-datetime']
+        new_status = request.form['study-status']
+        new_size = request.form['study-size']
+        new_tag_along = request.form['join']
 
 
         db.study.update_one(
-            {'title': title_receive},
+            {'_id': int(id_receive)},
             {'$set': {'study-name': new_title,
                       'study-type': new_study_type,
                       'level-category': new_level_category,
