@@ -30,9 +30,10 @@ def read_board():
 @bp.route('/api/create_board', methods=['POST'])
 @login_required
 def create_board():
+    print(request.form)
     if request.method == "POST":
-        post_title = request.form["post_title"]
-        question_contents = request.form["question-content"]  ## 구글링으로 일단 넣었다 ,,,,
+        title = request.form["post-name"]
+        question_content = request.form["post-content"]  ## 구글링으로 일단 넣었다 ,,,,
 
         # (Create를 할때!)게시물 인덱싱 조건문 추가
         if db.board.count_documents({}) == 0:  # board 테이블에 document 가 없으면
@@ -45,8 +46,8 @@ def create_board():
 
         doc = ({
                    '_id': index,  # 게시판 인덱스는 숫자로
-                   'title': post_title,
-                   'contents': question_contents,
+                   'post-name': title,
+                   'post-content': question_content,
                    'date': time.strftime('%y-%m-%d %H:%M:%S'), ##해결!
                    'user_id': session['user_id'],
                    'user_name': session['user_name'],  ## How? 유저아이디인지 유저이름인지 확인필요 따로따로 저장하고 표시는 이름으로
