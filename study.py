@@ -105,9 +105,19 @@ def study_delete():
 @bp.route('/api/study_list', methods=['GET'])   # READ
 @login_required
 def study_list():
-    study_list = list(db.study.find({}).sort('date', -1))
 
-    return jsonify({'study_list': study_list})
+    total_doc = db.study.count_documents
+    page_num = request.args.get('pageNum')
+    # page_num = 1  # 에러뜨면 일단 1로 설정하고 돌려보세요.
+    if page_num == 1:
+        skip_docs = 0
+    else:
+        skip_docs = (page_num-1) * 9
+
+    study_list = list(db.study.find({}).sort('date', -1).skip(skip_docs).limit(9))
+
+    print(study_list)
+    return jsonify({'total': total_doc, 'study_list': study_list})
 
 
 @bp.route('/api/study_target', methods=['GET'])   # 해당 스터디 정보만 가져오기
