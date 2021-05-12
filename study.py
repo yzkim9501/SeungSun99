@@ -50,8 +50,7 @@ def study_create():
             'join': tag_along_receive,
             'study-status': status_receive,
             'study-size': num_member,
-            'date': time.strftime('%y-%m-%d %H:%M:%S'),
-            'ooc': 1,
+            'date': time.strftime('%y-%m-%d %H:%M:%S')
         }
 
 
@@ -189,5 +188,11 @@ def message_to_leader():
         return jsonify({'msg': '전송 실패'})
 
 
+@bp.route('/api/isthismine', methods=['POST'])
+@login_required
+def isthismine():
 
+    st_id = request.form['study_index']
+    u_id = session['user_id']
 
+    if db.join_member.find_one
