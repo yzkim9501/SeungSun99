@@ -27,12 +27,9 @@ def study_create():
         contents_receive = request.form['study-explain']
         time_receive = request.form['start-datetime']
         tag_along_receive = request.form['study-type2']
-<<<<<<< HEAD
         status_receive = request.form['study-status']
-        size_receive = request.form['study-size']
-=======
         num_member = request.form['study-size']
->>>>>>> 0bf9b06c3a4dd17bf271d2e834341565f3a0a07f
+
 
         if db.study.count_documents({}) == 0:
             index = 1
@@ -45,22 +42,17 @@ def study_create():
             '_id': index,
             'leader_id': session['user_id'],
             'leader_name': session['user_name'],
-            'num_member': num_member,
             'study-name': title_receive,
             'study-type': type_receive,
             'level-category': level_receive,
             'study-explain': contents_receive,
             'start-datetime': time_receive,
             'join': tag_along_receive,
-<<<<<<< HEAD
             'study-status': status_receive,
-            'study-size': size_receive,
+            'study-size': num_member,
             'date': time.strftime('%y-%m-%d %H:%M:%S'),
+            'ooc': 1,
 
-=======
-            'ooc': 1
->>>>>>> 0bf9b06c3a4dd17bf271d2e834341565f3a0a07f
-        }
 
         db.study.insert_one(doc)
 
