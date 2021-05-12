@@ -37,6 +37,7 @@
     <script>
 
     var user_name, sub_name, user_img_url,user_id;
+    var show_current=1;
         if ("{{first_name}}" == '') { //만약에 플라스크에서 넘어온 정보가 없으면 새로고침한경우
             if (localStorage.getItem('user_name') == null) {
                 alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
@@ -96,6 +97,7 @@
                     $('#mod-button').attr('disabled',false)
                     $('#del-button').attr('disabled',false)
                 } else{
+                    //여기서 유저가 스터디에 가입되어있는지 판단 후에 버튼 텍스트를 참가/취소로 변경
                     $('#join-button').attr('disabled',false)
                     $('#mod-button').attr('disabled',true)
                     $('#del-button').attr('disabled',true)
@@ -107,7 +109,7 @@
             //작성자가 수정버튼을 클릭하면 모든 입력폼 enable하고 저장버튼
         }
 
-        function showStudyList(pageNum) {
+        function showStudyList(pageNum,isJoin) {
             $.ajax({
                 url: "/api/study_list", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
                 data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
@@ -116,7 +118,8 @@
                 async: false
             }).done(function (json) {
                 pagination(pageNum, 100);
-                console.log(json)
+                showtabs(isJoin==1?true:false);
+                console.log(show_current);
                 var studys=json['study_list']
                 $('#card-box').empty();
                 for (var i = 0; i < studys.length; i++) {
@@ -138,7 +141,30 @@
                 alert(errorThrown);
             })
         }
-
+        function showtabs(isJoin){
+            var to_html;
+            $('#study-tab').empty()
+            if(isJoin==true){
+                to_html=`
+              <li class="nav-item">
+                <a class="nav-link selected-tab" aria-current="page" href="Javascript:showStudyList(1,1)">모집 중인 스터디</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link unselected-tab" href="Javascript:showStudyList(1,0)">모집 완료된 스터디</a>
+              </li>`
+                show_current=1;
+            } else{
+                to_html=`
+              <li class="nav-item">
+                <a class="nav-link unselected-tab" href="Javascript:showStudyList(1,1)">모집 중인 스터디</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link selected-tab" aria-current="page" href="Javascript:showStudyList(1,0)">모집 완료된 스터디</a>
+              </li>`
+                show_current=0;
+            }
+            $('#study-tab').append(to_html)
+        }
         function pagination(page, totalCount) {
             $('#pagination').empty();
             // page : 현재 페이지, totalCount :  전체 게시물 갯수
@@ -158,19 +184,19 @@
                 endPage = totalPage;
             }
             if (page > 1) {
-                to_html += `<li><button onclick="showStudyList(${page - 1})" class="button">Prev</button></li>`
-            } else to_html += `<li><button onclick="showStudyList(1)" class="button disabled">Prev</button></li>`
+                to_html += `<li><button onclick="showStudyList(${page - 1},show_current)" class="button">Prev</button></li>`
+            } else to_html += `<li><button onclick="showStudyList(1),show_current" class="button disabled">Prev</button></li>`
 
             for (var iCount = startPage; iCount <= endPage; iCount++) {
                 if (iCount == page) {
-                    to_html += `<li><a href="javascript:showStudyList(${iCount})" class="page active">${iCount}</a></li>`
+                    to_html += `<li><a href="javascript:showStudyList(${iCount},show_current)" class="page active">${iCount}</a></li>`
                 } else {
-                    to_html += `<li><a href="javascript:showStudyList(${iCount})" class="page">${iCount}</a></li>`
+                    to_html += `<li><a href="javascript:showStudyList(${iCount},show_current)" class="page">${iCount}</a></li>`
                 }
             }
             if (page < totalPage) {
-                to_html += `<li><button onclick="showStudyList(${page + 1})" class="button">Next</button></li>`
-            } else to_html += `<li><button onclick="showStudyList(${totalPage})" class="button disabled">Next</button></li>`
+                to_html += `<li><button onclick="showStudyList(${page + 1},show_current)" class="button">Next</button></li>`
+            } else to_html += `<li><button onclick="showStudyList(${totalPage},show_current)" class="button disabled">Next</button></li>`
             $('#pagination').append(to_html);
         }
 
@@ -178,9 +204,10 @@
 
         function openclose() {
             if (status) {
-                showStudyList(1)
+                showStudyList(1,1)
                 $('#show-study').text('진행 중인 스터디 닫기')
             } else {
+                $('#study-tab').empty()
                 $('#card-box').empty()
                 $('#pagination').empty()
                 $('#show-study').text('진행 중인 스터디 보기')
@@ -224,6 +251,25 @@
         .study-view-detail {
             cursor: pointer;
         }
+
+        .selected-tab{
+            background-color: #f56a6a;
+            color:white;
+            border:2px solid #f56a6a;
+        }
+        .selected-tab:hover{
+            background-color: white;
+        }
+
+        .unselected-tab{
+            background-color: white;
+            color:#f56a6a;
+            border:2px solid #f56a6a;
+        }
+        .unselected-tab:hover{
+            background-color: #ffe0e0;
+            border:2px solid #f56a6a;
+        }
     </style>
 </head>
 <body class="is-preload">
@@ -241,7 +287,7 @@
             </header>
 
             <!-- Banner -->
-            <section id="banner" style="padding-left: 2em">
+            <section id="banner" style="padding: 5em 2em 2em 2em">
                 <div class="content">
                     <header>
                         <h1>승선99<br/></h1>
@@ -270,17 +316,17 @@
                         <div class="modal-body">
                             <form method="post" action="/api/study">
                                 <div class="row gtr-uniform">
-                                    <div class="col-12 col-12-xsmall form-label">
+                                    <div class="col-8 col-12-xsmall form-label">
                                         <input type="text" id="study-name" name="study-name" value=""
-                                               placeholder="스터디 이름" style="width: 90%;"/>
+                                               placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
                                     </div>
-                                    <div style="margin:0;padding: 0 0 0 10%; float:left">
-                                        <p style="font-size: x-small;color:darkslateblue">(ex) 파이썬 알고리즘 스터디 모집합니다, 웹개발
-                                            종합반 3주차부터 같이 달리실 분?, 매일 저녁 9시부터 Code with me!</p>
+                                    <div class="col-4 col-12-xsmall form-label">
+                                        <input type="text" id="study-size" name="study-size" value=""
+                                               placeholder="모집 인원(명)" style="margin:0 1em 0 0;"/>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
                                         <div class="input-group date" id="datetimepicker1" data-target-input="nearest"
-                                             style="margin:0 0 0 5%;width:90%">
+                                             style="margin:0;padding:0;">
                                             <input type="text" class="form-control datetimepicker-input"
                                                    data-target="#datetimepicker1" id="start-datetime"
                                                    name="start-datetime"
@@ -295,8 +341,14 @@
                                     </div>
                                     <!-- Break -->
                                     <div class="col-4 form-label">
+                                        <input type="text" id="leader" name="leader" value=""
+                                               style="margin:0 1em 0 0;"
+                                               placeholder="작성자" disabled/>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-3 form-label">
                                         <select name="level-category" id="study-level"
-                                                style="margin:0 10% 0 0;width:80%">
+                                                style="margin:0;">
                                             <option value="">- 스터디 난이도 -</option>
                                             <option value="3">무관</option>
                                             <option value="2">하</option>
@@ -305,14 +357,8 @@
                                         </select>
                                     </div>
                                     <!-- Break -->
-                                    <div class="col-4 form-label">
-                                        <input type="text" id="leader" name="leader" value=""
-                                               style="margin:0 0 0 10%;width:80%"
-                                               placeholder="작성자" disabled/>
-                                    </div>
-                                    <!-- Break -->
-                                    <div class="col-4 form-label">
-                                        <select name="study-type" id="study-type" style="margin:0;width:80%">
+                                    <div class="col-3 form-label">
+                                        <select name="study-type" id="study-type" style="margin:0;">
                                             <option value="">- 스터디 방식 -</option>
                                             <option value="0">감시형</option>
                                             <option value="1">토이 프로젝트</option>
@@ -322,11 +368,18 @@
                                             <option value="9">기타(설명란 기재)</option>
                                         </select>
                                     </div>
-                                    <div class="col-4 form-label">
-                                        <select name="study-type2" id="study-type2" style="margin:0;width:80%">
+                                    <div class="col-3 form-label">
+                                        <select name="study-type2" id="study-type2" style="margin:0;">
                                             <option value="">- 중도 참여 가능 여부 -</option>
                                             <option value="0">가능</option>
                                             <option value="1">불가</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3 form-label">
+                                        <select name="study-status" id="study-status" style="margin:0 1em 0 0;">
+                                            <option value="">- 모집 상태 -</option>
+                                            <option value="0">모집 중</option>
+                                            <option value="1">모집 종료</option>
                                         </select>
                                     </div>
                                     <!-- Break -->
@@ -334,7 +387,7 @@
                                         <label for="study-explain"></label>
                                         <textarea id="study-explain" name="study-explain"
                                                   placeholder="자세한 스터디 진행 방식을 공유해주세요."
-                                                  rows="6" style="width: 90%;"></textarea>
+                                                  rows="6" style="margin:0 1em 0 0;"></textarea>
                                     </div>
                                     <!-- Break -->
                                     <div class="col-12">
@@ -352,6 +405,7 @@
 
                 </div>
             </div>
+
             <!-- Modal -->
             <div class="modal fade" id="study-view" role="dialog" style="z-index: 15000">
                 <div class="modal-dialog modal-lg">
@@ -364,21 +418,20 @@
                         <div class="modal-body">
                             <form method="post" action="/api/study">
                                 <div class="row gtr-uniform">
-                                    <div class="col-12 col-12-xsmall form-label">
-                                        <input type="hidden" id="study-id" value=""/>
-                                        <input type="text" id="study-name2" name="study-name2" value=""
-                                               placeholder="스터디 이름" style="width: 90%;"/>
+                                    <div class="col-8 col-12-xsmall form-label">
+                                        <input type="text" id="study-name2" name="study-name" value=""
+                                               placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
                                     </div>
-                                    <div style="margin:0;padding: 0 0 0 10%; float:left">
-                                        <p style="font-size: x-small;color:darkslateblue">(ex) 파이썬 알고리즘 스터디 모집합니다, 웹개발
-                                            종합반 3주차부터 같이 달리실 분?, 매일 저녁 9시부터 Code with me!</p>
+                                    <div class="col-4 col-12-xsmall form-label">
+                                        <input type="text" id="study-size2" name="study-size" value=""
+                                               placeholder="모집 인원(명)" style="margin:0 1em 0 0;"/>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
                                         <div class="input-group date" id="datetimepicker2" data-target-input="nearest"
-                                             style="margin:0 0 0 5%;width:90%">
+                                             style="margin:0;padding:0;">
                                             <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#datetimepicker2" id="start-datetime2"
-                                                   name="start-datetime2"
+                                                   data-target="#datetimepicker1" id="start-datetime2"
+                                                   name="start-datetime"
                                                    placeholder="스터디 시작일/시간">
                                             <div class="input-group-append" data-target="#datetimepicker2"
                                                  data-toggle="datetimepicker">
@@ -390,8 +443,14 @@
                                     </div>
                                     <!-- Break -->
                                     <div class="col-4 form-label">
-                                        <select name="level-category2" id="study-level2"
-                                                style="margin:0 10% 0 0;width:80%">
+                                        <input type="text" id="leader2" name="leader" value=""
+                                               style="margin:0 1em 0 0;"
+                                               placeholder="작성자" disabled/>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-3 form-label">
+                                        <select name="level-category" id="study-level2"
+                                                style="margin:0;">
                                             <option value="">- 스터디 난이도 -</option>
                                             <option value="3">무관</option>
                                             <option value="2">하</option>
@@ -400,14 +459,8 @@
                                         </select>
                                     </div>
                                     <!-- Break -->
-                                    <div class="col-4 form-label">
-                                        <input type="text" id="leader2" name="leader2" value=""
-                                               style="margin:0 0 0 10%;width:80%"
-                                               placeholder="작성자" disabled/>
-                                    </div>
-                                    <!-- Break -->
-                                    <div class="col-4 form-label">
-                                        <select name="study-type2" id="study-type2" style="margin:0;width:80%">
+                                    <div class="col-3 form-label">
+                                        <select name="study-type" id="study-type2" style="margin:0;">
                                             <option value="">- 스터디 방식 -</option>
                                             <option value="0">감시형</option>
                                             <option value="1">토이 프로젝트</option>
@@ -417,28 +470,31 @@
                                             <option value="9">기타(설명란 기재)</option>
                                         </select>
                                     </div>
-                                    <div class="col-4 form-label">
-                                        <select name="study-type2" id="study-type2" style="margin:0;width:80%">
+                                    <div class="col-3 form-label">
+                                        <select name="study-type2" id="study-type22" style="margin:0;">
                                             <option value="">- 중도 참여 가능 여부 -</option>
                                             <option value="0">가능</option>
                                             <option value="1">불가</option>
                                         </select>
                                     </div>
+                                    <div class="col-3 form-label">
+                                        <select name="study-status" id="study-status2" style="margin:0 1em 0 0;">
+                                            <option value="">- 모집 상태 -</option>
+                                            <option value="0">모집 중</option>
+                                            <option value="1">모집 종료</option>
+                                        </select>
+                                    </div>
                                     <!-- Break -->
                                     <div class="col-12 form-label">
-                                        <label for="study-explain2"></label>
-                                        <textarea id="study-explain2" name="study-explain2"
+                                        <label for="study-explain"></label>
+                                        <textarea id="study-explain2" name="study-explain"
                                                   placeholder="자세한 스터디 진행 방식을 공유해주세요."
-                                                  rows="6" style="width: 90%;"></textarea>
+                                                  rows="6" style="margin:0 1em 0 0;"></textarea>
                                     </div>
                                     <!-- Break -->
                                     <div class="col-12">
                                         <ul class="actions">
-                                            <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()">Join</button></li>
-                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="Modify"/>
-                                            <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="del-button" onclick="delStudy()">Delete</button></li>
+                                            <li><input type="submit" class="button primary small fit" value="Save"/>
                                             </li>
                                             <li><input type="button" class="button primary small fit"
                                                        data-dismiss="modal" value="Close"/></li>
@@ -485,11 +541,12 @@
                 </div>
             </div>
 
-            <!-- 여기에 스터디 카드 넣어주세요 -->
-            <div class="card-columns" id="card-box">
-            </div>
-            <ul class="pagination" id="pagination">
-            </ul>
+            <!-- 스터디 탭 -->
+            <ul class="nav nav-pills nav-fill" id="study-tab" style="margin-bottom: 2em"></ul>
+            <!-- 스터디 카드 -->
+            <div class="card-columns" id="card-box"></div>
+            <!-- 페이지 -->
+            <ul class="pagination" id="pagination"></ul>
 
         </div>
     </div>
