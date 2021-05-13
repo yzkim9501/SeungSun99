@@ -119,7 +119,6 @@
                 dataType: "json", // 서버에서 보내줄 데이터의 타입
                 async: false
             }).done(function (json) {
-                console.log(json);
                 pagination(pageNum, json['total']);
                 var boards=json['all_boards']
                 $('#board-list').empty();
@@ -224,7 +223,7 @@
                             <h4 class="modal-title">새 게시글 작성</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/create_board">
+                            <form method="post" action="/api/create_board" onsubmit="alert('게시물이 추가되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <div class="col-8 form-label">
                                         <input type="text" id="post-name" name="post-name" value="" style="margin:0;"
@@ -267,7 +266,7 @@
                             <h4 class="modal-title">게시글 자세히 보기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/#">
+                            <form method="post" action="/api/#" onsubmit="alert('게시물이 수정되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <input type="hidden" name="board-id" id="board-id" value=""/>
                                     <div class="col-8 form-label">

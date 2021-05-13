@@ -64,7 +64,6 @@
         });
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
-            console.log(user_name)
             $(".modal-body #study-question-id").val(cardId);
             $(".modal-body #user_name").val(user_name);
         });
@@ -97,8 +96,6 @@
                 $('#study-size2').val(json['study-size']);
                 $('#study-status2').val(json['study-status']).change();
                 $('#study-id').val(json['_id']);
-                console.log(user_id);
-                console.log(json['leader_id']);
                 if(user_id==json['leader_id']){
                     $('#join-button').attr('disabled',true)
                     $('#mod-button').attr('disabled',false)
@@ -123,7 +120,6 @@
                         async: false
                     }).done(function (json) {
                         if(json['msg']=="true"){
-                            console.log(json)
                             $('#join-button').html('신청 취소');
                         } else
                             $('#join-button').html('신청');
