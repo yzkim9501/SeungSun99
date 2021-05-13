@@ -514,7 +514,7 @@
                                                placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
                                     </div>
                                     <div class="col-4 col-12-xsmall form-label">
-                                        <input type="text" id="study-size2" name="study-size" value="" required pattern="[0-9]"
+                                        <input type="text" id="study-size2" name="study-size" value="" required onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                placeholder="모집 인원(명)" style="margin:0 1em 0 0;"/>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
