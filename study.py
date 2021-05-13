@@ -97,7 +97,7 @@ def study_update():
 @bp.route('/api/study_delete', methods=["GET"])     # DELETE
 @login_required
 def study_delete():
-    id_receive = request.args.get('id')
+    id_receive = int(request.args.get('id'))
 
     data = db.study.find_one({'_id': id_receive})
 
