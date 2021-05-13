@@ -39,14 +39,19 @@
     </style>
     <script>
 
-        var user_name = localStorage.getItem('user_name')
-        var sub_name = localStorage.getItem('sub_name')
-        var user_img_url = localStorage.getItem('user_img_url')
-        var user_id = localStorage.getItem('user_id')
-        if(user_name==null){
-            alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
-            window.location.href="http://localhost:5000/"
-        }
+        var user_name, sub_name, user_img_url,user_id;
+    user_name = "{{session['user_name']}}"
+    sub_name = "{{session['sub_name']}}"
+    user_img_url = "{{session['img_url']}}"
+    user_id = "{{session['user_id']}}"
+        console.log(user_name);
+    console.log("{{session['user_name']}}");
+    console.log(sub_name);
+    console.log("{{session['sub_name']}}");
+    console.log(user_img_url)
+    console.log("{{session['img_url']}}");
+        console.log(user_id);
+    console.log("{{session['user_id']}}");
         $(document).ready(function () {
             showProfile();
             showBoardList(1);
@@ -223,7 +228,7 @@
                             <h4 class="modal-title">새 게시글 작성</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/create_board" onsubmit="alert('게시물이 작성되었습니다.');">
+                            <form method="post" action="/api/create_board" onsubmit="alert('게시물이 추가되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <div class="col-8 form-label">
                                         <input type="text" id="post-name" name="post-name" value="" style="margin:0;"
@@ -266,7 +271,7 @@
                             <h4 class="modal-title">게시글 자세히 보기</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/api/update_board" onsubmit="alert('게시물이 수정되었습니다.');">
+                            <form method="post" action="/api/create_board" onsubmit="alert('게시물이 수정되었습니다.');">
                                 <div class="row gtr-uniform">
                                     <input type="hidden" name="board-id" id="board-id" value=""/>
                                     <div class="col-8 form-label">

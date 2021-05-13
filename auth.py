@@ -54,12 +54,12 @@ def login():
     first_name = JSON_object['user']['profile']['first_name']
     last_name = JSON_object['user']['profile']['last_name']
     image_192 = JSON_object['user']['profile']['image_192']
-    my_res = make_response(
-        render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192, user_id=user_id))
 
     # post_message.dm(user_id, "Message here1234")  # user_id 다음의 인자 값으로 텍스트를 입력하면 슬랙 DM 으로 전송.
 
     session['user_name'] = first_name
+    session['sub_name'] = last_name
+    session['img_url'] = image_192
     session['user_id'] = user_id
 
     if db.user_info.find_one({'user_id': user_id}):
@@ -70,11 +70,9 @@ def login():
             'user_name': first_name
         })
 
-    return my_res
+    return render_template('study.html')
 
 
 @bp.route('/logout')
 def logout():
-    session.pop('username', None)
-    session.pop('user_id', None)
     return jsonify({'msg': '로그아웃 완료'}) and redirect('/')

@@ -1,6 +1,6 @@
 import pymongo
 
-from flask import Blueprint, render_template, jsonify, request, session, redirect
+from flask import Blueprint, render_template, jsonify, request, session, redirect, make_response
 import time
 import db  # db.py
 from auth import login_required
