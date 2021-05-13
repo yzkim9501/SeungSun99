@@ -13,11 +13,7 @@ db = db.get_db()
 @bp.route('/study', methods=['GET'])
 @login_required
 def study():
-    first_name = session.get('user_name')
-    last_name = session.get('sub_name')
-    image_192 = session.get('img_url')
-    user_id = session.get('user_id')
-    return make_response(render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192, user_id=user_id))
+    return render_template('study.html')
 
 
 @bp.route('/api/study', methods=["POST"])  # 스터디 생성 데이터 저장

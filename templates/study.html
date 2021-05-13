@@ -38,13 +38,19 @@
 
     var user_name, sub_name, user_img_url,user_id;
     var show_current=1,sortNum=0,current_isJoin;
-        user_name = "{{first_name}}"
-            sub_name = "{{last_name}}"
-            user_img_url = "{{image_192}}"
-            user_id = "{{user_id}}"
+    user_name = "{{session['user_name']}}"
+    sub_name = "{{session['sub_name']}}"
+    user_img_url = "{{session['img_url']}}"
+    user_id = "{{session['user_id']}}"
 
         console.log(user_name);
+    console.log("{{session['user_name']}}");
+    console.log(sub_name);
+    console.log("{{session['sub_name']}}");
+    console.log(user_img_url)
+    console.log("{{session['img_url']}}");
         console.log(user_id);
+    console.log("{{session['user_id']}}");
         $(document).ready(function () {
             showProfile();
             $('#leader').val(user_name);
