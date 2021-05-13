@@ -66,37 +66,47 @@ def study_update():
     if request.method == "POST":
         id_receive = request.form.get('study-id')
 
-        new_title = request.form['study-name']
-        new_study_type = request.form['study-type']
-        new_level_category = request.form['level-category']
-        new_contents = request.form['study-explain']
-        new_date = request.form['start-datetime']
-        new_status = request.form['study-status']
-        new_size = request.form['study-size']
-        new_tag_along = request.form['join']
+        data = db.study.find_one({'_id': id_receive})
+        if session['user_id'] != data['leader_id']:  # 권한 체크
+            return jsonify({'msg': '권한이 없습니다.'})  # 권한 없음 메세지 전달.
+        else:
+            new_title = request.form['study-name']
+            new_study_type = request.form['study-type']
+            new_level_category = request.form['level-category']
+            new_contents = request.form['study-explain']
+            new_date = request.form['start-datetime']
+            new_status = request.form['study-status']
+            new_size = request.form['study-size']
+            new_tag_along = request.form['join']
 
-        db.study.update_one(
-            {'_id': int(id_receive)},
-            {'$set': {'study-name': new_title,
-                      'study-type': new_study_type,
-                      'level-category': new_level_category,
-                      'study-explain': new_contents,
-                      'start-datetime': new_date,
-                      'study-status': new_status,
-                      'study-size': new_size,
-                      'join': new_tag_along}}
-        )
+            db.study.update_one(
+                {'_id': int(id_receive)},
+                {'$set': {'study-name': new_title,
+                          'study-type': new_study_type,
+                          'level-category': new_level_category,
+                          'study-explain': new_contents,
+                          'start-datetime': new_date,
+                          'study-status': new_status,
+                          'study-size': new_size,
+                          'join': new_tag_along}}
+            )
 
-        return redirect(request.referrer)
+            return redirect(request.referrer)
 
 
 @bp.route('/api/study_delete', methods=["GET"])     # DELETE
 @login_required
 def study_delete():
     id_receive = request.args.get('id')
-    db.study.delete_one({'_id': int(id_receive)})
 
-    return jsonify({'msg': '스터디 삭제 완료'})
+    data = db.study.find_one({'_id': id_receive})
+
+    if session['user_id'] != data['leader_id']:  # 권한 체크
+        return jsonify({'msg': '권한이 없습니다.'})  # 권한 없음 메세지 전달
+    else:
+        db.study.delete_one({'_id': int(id_receive)})
+
+        return jsonify({'msg': '스터디 삭제 완료'})
 
 
 @bp.route('/api/study_list', methods=['GET'])   # READ
@@ -106,7 +116,7 @@ def study_list():
     page_num = int(request.args.get('pageNum'))
     sort_num = int(request.args.get('sortNum'))
     isJoin = request.args.get('isJoin')
-    total_doc = db.study.find({'study-status':isJoin}).count()
+    total_doc = db.study.find({'study-status': isJoin}).count()
 
     if page_num == 1:
         skip_docs = 0
