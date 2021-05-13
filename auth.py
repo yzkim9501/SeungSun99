@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import session, redirect, request, render_template, make_response, Blueprint, jsonify
+
 import requests
 import json
 import urllib
@@ -75,4 +76,8 @@ def login():
 
 @bp.route('/logout')
 def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)
+    session.pop('sub_name', None)
+    session.pop('img_url', None)
     return jsonify({'msg': '로그아웃 완료'}) and redirect('/')
