@@ -76,7 +76,7 @@ def login():
 
 @bp.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.pop('user_name', None)
     session.pop('user_id', None)
     session.pop('sub_name', None)
     session.pop('img_url', None)
