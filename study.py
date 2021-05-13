@@ -12,6 +12,7 @@ db = db.get_db()
 
 @bp.route('/study', methods=['GET'])
 @login_required
+
 def study():
     return render_template('study.html')
 
