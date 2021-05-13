@@ -50,6 +50,7 @@
         $(document).ready(function () {
             showProfile();
             showBoardList(1);
+            $('#leader').val(user_name);
         });
 
         function showProfile(code) {
@@ -62,28 +63,84 @@
 
         function showPostDetail(postIdx){
             //여기에 포스트인덱스로 한개의 스터디 디테일 가져오는 API 작성
-            $('#board-detail').modal('show');
+            $('#board-view').modal('show');
             $('#post-name').val(postIdx+'번 게시물을 가지고와주세요');
             //모든 입력폼 disable하고, 작성자면 수정/삭제/닫기버튼. 작성자가 아니면 닫기버튼 표출
             //작성자가 수정버튼을 클릭하면 모든 입력폼 enable하고 저장버튼
+
+             $.ajax({
+                url: "/api/board_target?index="+postIdx, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                dataType: "json", // 서버에서 보내줄 데이터의 타입
+                async: false
+            }).done(function (json) {
+                $('#post-name2').val(json['post-name']);
+                $('#leader2').val(json['user_name']);
+                $('#post-content2').val(json['post-content']);
+                $('#board-id').val(json['_id']);
+
+                if(user_id==json['user_id']){
+                    $('#mod-button').attr('disabled',false)
+                    $('#del-button').attr('disabled',false)
+                } else{
+                    $('#post-name2').attr('disabled',true)
+                    $('#leader2').attr('disabled',true);
+                    $('#post-content2').attr('disabled',true);
+
+                    $('#mod-button').attr('disabled',true)
+                    $('#del-button').attr('disabled',true)
+                }
+            }).fail(function (xhr, status, errorThrown) {
+                alert(errorThrown);
+            })
+        }
+
+        function delBoard() {
+            var boardId=$('#board-id').val();
+            $.ajax({
+                url: "/api/delete_board?index="+boardId, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                dataType: "json", // 서버에서 보내줄 데이터의 타입
+                async: false
+            }).done(function (json) {
+                alert(json['msg']);
+            }).fail(function (xhr, status, errorThrown) {
+                alert(errorThrown);
+            })
         }
 
         function showBoardList(pageNum) {
-            var data = getPageData(pageNum);
-            $('#board-list').empty();
-            for (var i = 0;i < 10;i++){
-                var to_html = `<<tr>
-                            <td>${i}</td>
-                            <td><a href="javascript:showPostDetail(${i});">TEST ${i}</a></td>
-                            <td>author${i}</td>
-                            <td>2021-05-06</td>
+            $.ajax({
+                url: "/api/read_board?pageNum="+pageNum, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                dataType: "json", // 서버에서 보내줄 데이터의 타입
+                async: false
+            }).done(function (json) {
+                console.log(json);
+                pagination(pageNum, json['total']);
+                var boards=json['all_boards']
+                $('#board-list').empty();
+                for (var i = 0; i < boards.length; i++) {
+                    var name,content;
+                    var id=boards[i]['_id']
+
+                    if(boards[i]['post-name'].length>=30){
+                        name=boards[i]['post-name'].slice(0,27)+'...';
+                    } else name=boards[i]['post-name']
+                    var to_html = `<<tr>
+                            <td>${id}</td>
+                            <td><a href="javascript:showPostDetail(${id});">${name}</a></td>
+                            <td>${boards[i]['user_name']}</td>
+                            <td>${boards[i]['date']}</td>
                         </tr>`
-                $('#board-list').append(to_html)
-            }
-        }
-        function getPageData(page){
-            //여기에 페이지 수를 넘기면 게시물을 반환하는 API 작성
-            pagination(page,100);
+                    $('#board-list').append(to_html)
+                }
+            }).fail(function (xhr, status, errorThrown) {
+                alert(errorThrown);
+            })
         }
         function pagination(page, totalCount){
             $('#pagination').empty();
@@ -192,6 +249,51 @@
                                             </li>
                                             <li><input type="button" class="button primary small fit"
                                                        data-dismiss="modal" value="Close"/></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="board-view" role="dialog" style="z-index: 15000">
+                <div class="modal-dialog modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">게시글 자세히 보기</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/api/#">
+                                <div class="row gtr-uniform">
+                                    <input type="hidden" name="board-id" id="board-id" value=""/>
+                                    <div class="col-8 form-label">
+                                        <input type="text" id="post-name2" name="post-name" value="" style="margin:0;"
+                                               placeholder="제목을 입력해주세요."/>
+                                    </div>
+                                    <!-- Break -->
+                                    <div class="col-4 form-label">
+                                        <input type="text" id="leader2" name="leader" value=""
+                                               style="margin:0 1em 0 0;"
+                                               placeholder="작성자" disabled/>
+                                    </div>
+                                    <div class="col-12 form-label">
+                                        <input type="hidden" id="modal-card-id" value=""/>
+                                        <textarea id="post-content2" name="post-content"
+                                                  placeholder="내용을 입력해주세요."
+                                                  rows="6" style="margin:0 1em 0 0;"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <ul class="actions">
+                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="수정"/>
+                                            <li><button class="button primary small fit"
+                                                       data-dismiss="modal" id="del-button" onclick="delBoard()">삭제</button></li>
+                                            </li>
+                                            <li><input type="button" class="button primary small fit"
+                                                       data-dismiss="modal" value="닫기"/></li>
                                         </ul>
                                     </div>
                                 </div>

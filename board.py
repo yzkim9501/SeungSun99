@@ -1,6 +1,6 @@
 import pymongo
 
-from flask import Blueprint, render_template, jsonify, request, session
+from flask import Blueprint, render_template, jsonify, request, session, redirect
 import time
 import db  # db.py
 from auth import login_required
@@ -64,7 +64,7 @@ def create_board():
         ##업데이트시, 1)정보를 불러와야함 2)새로 입력한 값으로 바꿈.
         db.board.insert_one(doc)
 
-        return jsonify({'msg': '게시판에 글이 작성되었습니다.'})
+        return redirect(request.referrer)
 
 ## if post-tilte == '빈 문자열' return ()
 ## (Delete) index를 받아서 get 방식으로 게시물 글 지우기!
