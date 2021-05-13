@@ -20,7 +20,6 @@ def study():
 @bp.route('/api/study', methods=["POST"])  # 스터디 생성 데이터 저장
 @login_required
 def study_create():
-    print(request.form)
     if request.method == "POST":
         title_receive = request.form['study-name']
         type_receive = request.form['study-type']
@@ -63,12 +62,10 @@ def study_create():
 @bp.route('/api/study_update', methods=["POST"])   # Update
 @login_required
 def study_update():
-    print(request.form)
     if request.method == "POST":
         id_receive = request.form.get('study-id')
 
         data = db.study.find_one({'_id': int(id_receive)})
-        print(data['leader_id'])
 
         new_title = request.form['study-name']
         new_study_type = request.form['study-type']
@@ -113,9 +110,6 @@ def study_delete():
 @bp.route('/api/study_list', methods=['GET'])   # READ
 @login_required
 def study_list():
-    print(session.get('user_id'))  # test code
-    data = db.study.find_one({'_id': 1})# test code
-    print(data['leader_id'])  # test code
 
     page_num = int(request.args.get('pageNum'))
     sort_num = int(request.args.get('sortNum'))
@@ -138,7 +132,6 @@ def study_list():
         study_data = study_data.sort('now-num', 1)
 
     study_list = list(study_data)
-    print(study_list)
     return jsonify({'total': total_doc, 'study_list': study_list})
 
 
@@ -221,8 +214,6 @@ def message_to_leader():
         user_name = request.form['user_name']  # 보내는 사람
         study_id = request.form['study-question-id']
 
-        print(user_name)
-        print(study_id)
         text = user_name + '님이 메세지를 전송하였습니다. \n' + request.form['to-leader']  +'\n이 대화의 답장이 아닌, 질문자분께 직접 dm해주세요!'# 메세지
         receiver = db.study.find_one({'_id': int(study_id)})
         receiver = receiver['leader_id']

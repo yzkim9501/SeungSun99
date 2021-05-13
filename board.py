@@ -39,7 +39,6 @@ def read_board():
 @bp.route('/api/create_board', methods=['POST'])
 @login_required
 def create_board():
-    print(request.form)
     if request.method == "POST":
         title = request.form["post-name"]
         question_content = request.form["post-content"]
@@ -71,7 +70,6 @@ def create_board():
 @bp.route('/api/update_board', methods=['POST'])
 @login_required
 def update_board():
-    print(request.form)
     if request.method == "POST":
         id_receive = request.form.get('board-id')
         data = db.board.find_one({'_id': int(id_receive)})
