@@ -74,14 +74,14 @@ def update_board():
     print(request.form)
     if request.method == "POST":
         id_receive = request.form.get('board-id')
-        data = db.board.find_one({'_id': id_receive})
+        data = db.board.find_one({'_id': int(id_receive)})
 
         if session.get('user_id') == data['user_id']:
             new_title = request.form['post-name'],
             new_content = request.form['post-content']
 
             db.board.update_one({'_id': int(id_receive)},
-                                {'$SET': {'post-name': new_title,
+                                {'$set': {'post-name': new_title,
                                           'post-content': new_content}})
             return redirect(request.referrer)
         else:
