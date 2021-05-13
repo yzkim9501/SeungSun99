@@ -1,6 +1,6 @@
 import pymongo
 
-from flask import Blueprint, render_template, jsonify, request, session, redirect
+from flask import Blueprint, render_template, jsonify, request, session, redirect, make_response
 import time
 import db  # db.py
 from auth import login_required
@@ -15,7 +15,11 @@ bp = Blueprint('board', __name__) #Flask
 @bp.route('/board')  # 블루프린트 사용하기! @app.route 대신!
 @login_required
 def board():
-    return render_template('board.html')
+    first_name = session.get('user_name')
+    last_name = session.get('sub_name')
+    image_192 = session.get('img_url')
+    user_id = session.get('user_id')
+    return make_response(render_template('board.html', first_name=first_name, last_name=last_name, image_192=image_192, user_id=user_id))
 
 
 ## (Read) 맨 처음 게시판의 목록이 보이는 것

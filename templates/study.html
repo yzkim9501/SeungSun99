@@ -38,26 +38,13 @@
 
     var user_name, sub_name, user_img_url,user_id;
     var show_current=1,sortNum=0,current_isJoin;
-        if ("{{first_name}}" == '') { //만약에 플라스크에서 넘어온 정보가 없으면 새로고침한경우
-            if (localStorage.getItem('user_name') == null) {
-                alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
-                window.location.href = "http://localhost:5000/"
-            }
-            user_name = localStorage.getItem('user_name')
-            sub_name = localStorage.getItem('sub_name')
-            user_img_url = localStorage.getItem('user_img_url')
-            user_id = localStorage.getItem('user_id')
-        } else {
-            user_name = "{{first_name}}"
+        user_name = "{{first_name}}"
             sub_name = "{{last_name}}"
             user_img_url = "{{image_192}}"
             user_id = "{{user_id}}"
-            localStorage.setItem('user_name', user_name)
-            localStorage.setItem('sub_name', sub_name)
-            localStorage.setItem('user_img_url', user_img_url)
-            localStorage.setItem('user_id', user_id)
-        }
 
+        console.log(user_name);
+        console.log(user_id);
         $(document).ready(function () {
             showProfile();
             $('#leader').val(user_name);
