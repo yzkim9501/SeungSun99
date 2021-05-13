@@ -37,7 +37,7 @@
     <script>
 
     var user_name, sub_name, user_img_url,user_id;
-    var show_current=1;
+    var show_current=1,sortNum=0,current_isJoin;
         if ("{{first_name}}" == '') { //만약에 플라스크에서 넘어온 정보가 없으면 새로고침한경우
             if (localStorage.getItem('user_name') == null) {
                 alert("이미 로그아웃된 사용자입니다. 다시 로그인해주세요.")
@@ -61,7 +61,14 @@
         $(document).ready(function () {
             showProfile();
             $('#leader').val(user_name);
+            $('#sortNumSelect').attr('style',"display:none")
         });
+
+        $(document).on('change','#sortNumSelect',function(){
+            sortNum=$('#sortNumSelect').val();
+            showStudyList(1,current_isJoin);
+        });
+
         $(document).on("click", ".open-reader-question", function () {
             var cardId = $(this).data('id');
             $(".modal-body #study-question-id").val(cardId);
@@ -139,12 +146,13 @@
 
         function showStudyList(pageNum,isJoin) {
             $.ajax({
-                url: "/api/study_list?pageNum="+pageNum+"&isJoin="+isJoin, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                url: "/api/study_list?pageNum="+pageNum+"&isJoin="+isJoin+"&sortNum="+sortNum, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
                 data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
                 method: "GET", // HTTP 요청 메소드(GET, POST 등)
                 dataType: "json", // 서버에서 보내줄 데이터의 타입
                 async: false
             }).done(function (json) {
+                current_isJoin=isJoin;
                 pagination(pageNum, json['total']);
                 showtabs(isJoin==1?true:false);
                 var studys=json['study_list']
@@ -251,9 +259,12 @@
 
         function openclose() {
             if (status) {
+                $('#sortNumSelect').attr('style',"display:block;width:20%;margin-bottom: 0.5em;margin-left:1em;")
                 showStudyList(1,1)
                 $('#show-study').text('진행 중인 스터디 닫기')
+
             } else {
+                $('#sortNumSelect').attr('style',"display:none")
                 $('#study-tab').empty()
                 $('#card-box').empty()
                 $('#pagination').empty()
@@ -625,9 +636,16 @@
                     </div>
                 </div>
             </div>
-
             <!-- 스터디 탭 -->
-            <ul class="nav nav-pills nav-fill" id="study-tab" style="margin-bottom: 2em"></ul>
+            <ul class="nav nav-pills nav-fill" id="study-tab" style="margin-bottom: 0.5em"></ul>
+
+            <!-- 정렬 -->
+            <select id="sortNumSelect">
+                <option value="0">최신순</option>
+                <option value="1">오래된 순</option>
+                <option value="2">인원 많은 순</option>
+                <option value="3">인원 적은 순</option>
+            </select>
             <!-- 스터디 카드 -->
             <div class="d-flex flex-row flex-wrap" id="card-box"></div>
             <!-- 페이지 -->

@@ -104,8 +104,7 @@ def study_delete():
 def study_list():
 
     page_num = int(request.args.get('pageNum'))
-    # sort_num = int(request.args.get('sortNum'))
-    sort_num = 3  # 임시 값
+    sort_num = int(request.args.get('sortNum'))
     isJoin = request.args.get('isJoin')
     total_doc = db.study.find({'study-status':isJoin}).count()
 
