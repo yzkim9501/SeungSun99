@@ -50,12 +50,11 @@ def study_create():
             'join': tag_along_receive,
             'study-status': status_receive,
             'study-size': num_member,
-            'date': time.strftime('%y-%m-%d %H:%M:%S')
+            'date': time.strftime('%y-%m-%d %H:%M:%S'),
+            'now-num': 0
         }
 
-
         db.study.insert_one(doc)
-
 
         return redirect(request.referrer)
 
@@ -76,7 +75,6 @@ def study_update():
         new_size = request.form['study-size']
         new_tag_along = request.form['join']
 
-
         db.study.update_one(
             {'_id': int(id_receive)},
             {'$set': {'study-name': new_title,
@@ -88,7 +86,6 @@ def study_update():
                       'study-size': new_size,
                       'join': new_tag_along}}
         )
-
 
         return redirect(request.referrer)
 
@@ -108,7 +105,7 @@ def study_list():
 
     page_num = int(request.args.get('pageNum'))
     # sort_num = int(request.args.get('sortNum'))
-    sort_num = 0  # 임시 값
+    sort_num = 3  # 임시 값
     isJoin = request.args.get('isJoin')
     total_doc = db.study.find({'study-status':isJoin}).count()
 
@@ -122,10 +119,10 @@ def study_list():
         pass
     elif sort_num == 1:  # 오래된 순
         study_data = study_data.sort('date', 1)
-    elif sort_num == 2:  # 인원 적은 순
-        pass
-    else:  # 인원 많은 순
-        pass
+    elif sort_num == 2:  # 인원 많은 순
+        study_data = study_data.sort('now-num', -1)
+    else:  # 인원 적은 순
+        study_data = study_data.sort('now-num', 1)
 
     study_list = list(study_data)
     print(study_list)
@@ -147,10 +144,12 @@ def study_target():
 def join_study():
 
     if request.method == "GET":
+
+        st_id = request.args.get('study_index')
         dic = (
             {
                 'user_id': session['user_id'],
-                'study_index': request.args.get('study_index')
+                'study_index': st_id
             }
         )
 
@@ -163,8 +162,12 @@ def join_study():
         if study_status == 1:
             db.join_member.insert_one(dic)
 
+            data = db.study.find_one({'_id': st_id})
+            data = data['now-num'] + 1
+            db.study.update_one({'_id': st_id}, {'$set': {'now-num': data}})  # 스터디 현재 참가인원 업데이트
+
             if db.join_member.count_document == num:  # 스터디정원 꽉 찼을 때.
-                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'study-status': 0}})  # ooc 0으로 업데이트
+                db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'study-status': 0}})
 
                 msg = "참가인원 full, 참가자: "
 
@@ -190,6 +193,10 @@ def exit_study():
     for i in data:
         if i['study_index'] == study_index:
             db.join_member.delete_one({'_id': i['_id']})
+
+            data = db.study.find_one({'_id': study_index})  # now-num -1
+            data = data['now-num'] - 1
+            db.study.update_one({'_id': study_index}, {'$set': {'now-num': data}})
 
     return jsonify({'msg': '스터디 신청 취소가 완료되었습니다.'})
 
