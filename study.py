@@ -67,7 +67,7 @@ def study_update():
     if request.method == "POST":
         id_receive = request.form.get('study-id')
 
-        data = db.study.find_one({'_id': id_receive})
+        data = db.study.find_one({'_id': int(id_receive)})
         print(data['leader_id'])
 
         new_title = request.form['study-name']
