@@ -61,6 +61,8 @@ def login():
 
     session['user_name'] = first_name
     session['user_id'] = user_id
+    session['sub_name'] = last_name
+    session['img_url'] = image_192
 
     if db.user_info.find_one({'user_id': user_id}):
         pass
@@ -77,4 +79,6 @@ def login():
 def logout():
     session.pop('username', None)
     session.pop('user_id', None)
+    session.pop('sub_name', None)
+    session.pop('img_url', None)
     return jsonify({'msg': '로그아웃 완료'}) and redirect('/')

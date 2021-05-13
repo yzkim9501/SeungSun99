@@ -1,4 +1,4 @@
-from flask import Blueprint, session, request, render_template, jsonify, redirect
+from flask import Blueprint, session, request, render_template, jsonify, redirect, make_response
 
 import post_message
 from auth import login_required
@@ -10,10 +10,14 @@ bp = Blueprint("study", __name__)
 db = db.get_db()
 
 
-@bp.route('/study')
+@bp.route('/study', methods=['GET'])
 @login_required
 def study():
-    return render_template('study.html')
+    first_name = session.get('user_name')
+    last_name = session.get('sub_name')
+    image_192 = session.get('img_url')
+    user_id = session.get('user_id')
+    return make_response(render_template('study.html', first_name=first_name, last_name=last_name, image_192=image_192, user_id=user_id))
 
 
 @bp.route('/api/study', methods=["POST"])  # 스터디 생성 데이터 저장
@@ -67,17 +71,18 @@ def study_update():
         id_receive = request.form.get('study-id')
 
         data = db.study.find_one({'_id': id_receive})
+        print(data['leader_id'])
+
+        new_title = request.form['study-name']
+        new_study_type = request.form['study-type']
+        new_level_category = request.form['level-category']
+        new_contents = request.form['study-explain']
+        new_date = request.form['start-datetime']
+        new_status = request.form['study-status']
+        new_size = request.form['study-size']
+        new_tag_along = request.form['join']
 
         if session.get('user_id') == data['leader_id']:  # 권한 체크
-            new_title = request.form['study-name']
-            new_study_type = request.form['study-type']
-            new_level_category = request.form['level-category']
-            new_contents = request.form['study-explain']
-            new_date = request.form['start-datetime']
-            new_status = request.form['study-status']
-            new_size = request.form['study-size']
-            new_tag_along = request.form['join']
-
             db.study.update_one(
                 {'_id': int(id_receive)},
                 {'$set': {'study-name': new_title,
