@@ -85,7 +85,7 @@
                 $('#study-type2').val(json['study-type']).change();
                 $('#join2').val(json['join']).change();
                 $('#study-explain2').val(json['study-explain']);
-                $('#study-size2').val('모집인원 : '+json['study-size']+'명');
+                $('#study-size2').val(json['study-size']);
                 $('#study-status2').val(json['study-status']).change();
                 $('#study-id').val(json['_id']);
                 if(user_id==json['leader_id']){
@@ -500,6 +500,7 @@
                                                placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
                                     </div>
                                     <div class="col-4 col-12-xsmall form-label">
+                                        <label for="study-size" style="width:40%">모집 인원</label>
                                         <input type="text" id="study-size2" name="study-size" value="" required onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                placeholder="모집 인원(명)" style="margin:0 1em 0 0;"/>
                                     </div>
