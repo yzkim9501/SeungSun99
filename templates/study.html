@@ -85,7 +85,7 @@
                 $('#study-type2').val(json['study-type']).change();
                 $('#join2').val(json['join']).change();
                 $('#study-explain2').val(json['study-explain']);
-                $('#study-size2').val(json['study-size']);
+                $('#study-size2').val('모집인원 : '+json['study-size']+'명');
                 $('#study-status2').val(json['study-status']).change();
                 $('#study-id').val(json['_id']);
                 if(user_id==json['leader_id']){
@@ -165,7 +165,7 @@
                     }else explain=studys[i]['study-explain']
                     var to_html = `<div class="card card-block col-md-4" id="card-${id}" style="width: 100%;border:none;">
                     <div class="card-body" id="card-body-${id}" style="margin-top:0.5em;padding-bottom:0em;border:1px solid rgba(0,0,0,.125);border-radius:.25rem;text-align: center">
-                        <h5 class="card-title">${name}</h5>
+                        <h5 class="card-title">${name} (${studys[i]['now-num']}/${studys[i]['study-size']})</h5>
                         <p class="card-text">${explain}<br>
                         <strong style="color:#f56a6a">난이도</strong> : <span>${level}</span><br> <strong style="color:#f56a6a">카테고리 </strong>: <span>${type}</span><br>
                         </p>
