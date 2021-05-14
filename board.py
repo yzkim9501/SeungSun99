@@ -90,9 +90,14 @@ def update_board():
 @login_required
 def delete_board():
     delete1 = request.args.get('index')
-    db.board.delete_one({'index': int(delete1)})
+    data = db.board.find_one({'_id': int(delete1)})
 
-    return jsonify({'msg': '게시물이 삭제되었습니다.'})
+    if session.get('user_id') == data['user_id']:
+       db.board.delete_one({'_id': int(delete1)})
+
+       return jsonify({'msg': '게시물이 삭제되었습니다.'})
+    else:
+       return jsonify({'msg': '권한이 없습니다..'})
 
 
 @bp.route('/api/board_target', methods=['GET'])
