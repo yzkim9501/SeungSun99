@@ -169,20 +169,18 @@ def join_study():
             db.join_member.insert_one(dic)
 
             data = db.study.find_one({'_id': st_id})
-            data = data['now-num'] + 1
-            db.study.update_one({'_id': st_id}, {'$set': {'now-num': data}})  # 스터디 현재 참가인원 업데이트
-
-            if data == int(num):  # 스터디정원 꽉 찼을 때.
-                db.study.update_one({'_id': int(request.form['study_index'])}, {'$set': {'study-status': 0}})
+            db.study.update_one({'_id': st_id}, {'$set': {'now-num': data['now-num'] + 1}})  # 스터디 현재 참가인원 업데이트
+            if int(data['now-num'] + 1) >= int(data['study-size']):  # 스터디정원 꽉 찼을 때.
+                db.study.update_one({'_id': st_id}, {'$set': {'study-status': "0"}})
 
                 msg = "참가인원 full, 참가자: "
 
-                st_mem = list(db.join_member.find({'study_index': request.form['study_index']}))
+                st_mem = list(db.join_member.find({'study_index': str(st_id)}))
                 for mem in st_mem:
                     u_id = mem[0]  # user_id
                     u_name = db.user_info.find_one({'user_id': u_id})[1]  # user_name
                     msg = msg + u_name + " "
-                post_message.db(leader_id, msg)
+                post_message.dm(leader_id, msg)
 
             return jsonify({'msg': '스터디에 참여 완료하였습니다.'})
         else:
