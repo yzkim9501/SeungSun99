@@ -151,7 +151,7 @@ def join_study():
 
     if request.method == "GET":
 
-        st_id = request.args.get('study_index')
+        st_id = int(request.args.get('study_index'))
         dic = (
             {
                 'user_id': session['user_id'],
