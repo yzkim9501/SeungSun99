@@ -296,6 +296,7 @@
                 async: false
             }).done(function (json) {
                 alert(json['msg']);
+                window.location.reload();
             }).fail(function (xhr, status, errorThrown) {
                 alert(errorThrown);
             })
