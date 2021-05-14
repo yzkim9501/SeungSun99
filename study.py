@@ -193,7 +193,7 @@ def join_study():
 @login_required
 def exit_study():
     user_id = session['user_id']
-    study_index = request.args.get('study_index')
+    study_index = int(request.args.get('study_index'))
 
     data = db.join_member.find({'user_id': user_id})
     for i in data:
@@ -201,7 +201,7 @@ def exit_study():
             db.join_member.delete_one({'_id': i['_id']})
 
             data = db.study.find_one({'_id': study_index})  # now-num -1
-            data = data['now-num'] - 1
+            data = int(data['now-num']) - 1
             db.study.update_one({'_id': study_index}, {'$set': {'now-num': data}})
 
     return jsonify({'msg': '스터디 신청 취소가 완료되었습니다.'})
