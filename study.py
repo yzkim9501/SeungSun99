@@ -168,9 +168,9 @@ def join_study():
         if study_status == 1:
             db.join_member.insert_one(dic)
 
-            data = db.study.find_one({'_id': st_id})
+            data = db.study.find_one({'_id': int(st_id)})
             data = data['now-num'] + 1
-            db.study.update_one({'_id': st_id}, {'$set': {'now-num': data}})  # 스터디 현재 참가인원 업데이트
+            db.study.update_one({'_id': int(st_id)}, {'$set': {'now-num': data}})  # 스터디 현재 참가인원 업데이트
 
             if db.join_member.count_document == num:  # 스터디정원 꽉 찼을 때.
                 db.join_member.update_one({'_id': request.form['study_index']}, {'$set': {'study-status': 0}})
