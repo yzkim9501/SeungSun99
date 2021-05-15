@@ -175,10 +175,10 @@ def join_study():
 
                 msg = "참가인원 full, 참가자: "
 
-                st_mem = list(db.join_member.find({'study_index': str(st_id)}))
+                st_mem = list(db.join_member.find({'study_index': st_id}))
                 for mem in st_mem:
-                    u_id = mem[0]  # user_id
-                    u_name = db.user_info.find_one({'user_id': u_id})[1]  # user_name
+                    u_id = mem['user_id']  # user_id
+                    u_name = db.user_info.find_one({'user_id': u_id})['user_name']  # user_name
                     msg = msg + u_name + " "
                 post_message.dm(leader_id, msg)
 

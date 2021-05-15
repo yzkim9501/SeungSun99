@@ -57,16 +57,40 @@
             $('#sub').append(sub_name)
         }
         function showMyStudy() {
-            var to_html=``
-            for(var i=0;i<4;i++)
-            {
-                to_html += `
-                <div class="box col-5 col-12-xsmall form-label" style="float:left;display:block;margin:2em">
-                    <h3>스터디 이름 (3/5)</h3>
-					<p>리더 : 누구 <br>참가자 : 누구 누구 ㄴ구ㅜ ㄴ구누구 ㄴㄱ ㄴㄱ ㄴㄱ</p>
-				</div>`
-            }
-                $('#studys').append(to_html)
+
+            $.ajax({
+                url: "/api/view_mystudy", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                dataType: "json", // 서버에서 보내줄 데이터의 타입
+                async: false
+            }).done(function (json) {
+                console.log(json);
+
+                var to_html=``
+                for(var i=0;i<json.length;i++)
+                {
+                    $.ajax({
+                        url: "/api/view_joinmember?study_index="+json[i]['_id'], // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+                        data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
+                        method: "GET", // HTTP 요청 메소드(GET, POST 등)
+                        dataType: "json", // 서버에서 보내줄 데이터의 타입
+                        async: false
+                    }).done(function (member) {
+                        to_html += `
+                        <div class="box col-5 col-12-xsmall form-label" style="float:left;display:block;margin:2em">
+                            <h3>${json[i]['study-name']} (${json[i]['now-num']}/${json[i]['study-size']})</h3>
+                            <p>리더 : ${json[i]['leader_name']} <br>참가자 : ${member['join_member']}</p>
+                        </div>`
+                    }).fail(function (xhr, status, errorThrown) {
+                        alert(errorThrown);
+                    })
+                }
+                    $('#studys').append(to_html)
+            }).fail(function (xhr, status, errorThrown) {
+                alert(errorThrown);
+            })
+
         }
     </script>
 </head>
@@ -81,7 +105,7 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="/board" class="logo"><strong>My Page</strong></a>
+                <a href="/mypage" class="logo"><strong>My Study</strong></a>
             </header>
             <br>
             <div class="content" id="studys">
@@ -100,7 +124,7 @@
                 <ul>
                     <li><a href="/study">Study</a></li>
                     <li><a href="/board">Board</a></li>
-                    <li><a href="/mypage">My Page</a></li>
+                    <li><a href="/mypage">My Study</a></li>
                     <li><a href="/logout">log out</a></li>
                 </ul>
             </nav>
