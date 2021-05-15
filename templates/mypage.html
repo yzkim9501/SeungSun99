@@ -46,6 +46,7 @@
     user_id = "{{session.user_id}}"
         $(document).ready(function () {
             showProfile();
+            showMyStudy();
             $('#leader').val(user_name);
         });
 
@@ -55,7 +56,18 @@
             $('#name').append(user_name)
             $('#sub').append(sub_name)
         }
-
+        function showMyStudy() {
+            var to_html=``
+            for(var i=0;i<4;i++)
+            {
+                to_html += `
+                <div class="box col-5 col-12-xsmall form-label" style="float:left;display:block;margin:2em">
+                    <h3>스터디 이름 (3/5)</h3>
+					<p>리더 : 누구 <br>참가자 : 누구 누구 ㄴ구ㅜ ㄴ구누구 ㄴㄱ ㄴㄱ ㄴㄱ</p>
+				</div>`
+            }
+                $('#studys').append(to_html)
+        }
     </script>
 </head>
 <body class="is-preload">
@@ -72,10 +84,8 @@
                 <a href="/board" class="logo"><strong>My Page</strong></a>
             </header>
             <br>
-            <div class="content">
-
+            <div class="content" id="studys">
             </div>
-
         </div>
     </div>
 
