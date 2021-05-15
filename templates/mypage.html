@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>승선99 - 너, 내 동료가 돼라!</title>
+    <link rel="shortcut icon" href="../static/images/ss99.ico">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="../static/assets/css/main.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/ss99.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+        .form-label {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center
+        }
+    </style>
+    <script>
+
+        var user_name, sub_name, user_img_url,user_id;
+    user_name = "{{session.user_name}}"
+    sub_name = "{{session.sub_name}}"
+    user_img_url = "{{session.img_url}}"
+    user_id = "{{session.user_id}}"
+        $(document).ready(function () {
+            showProfile();
+            $('#leader').val(user_name);
+        });
+
+        function showProfile(code) {
+            var to_html = `<img src="${user_img_url}" class="rounded" width="155">`
+            $('#profile_img').append(to_html)
+            $('#name').append(user_name)
+            $('#sub').append(sub_name)
+        }
+
+    </script>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="/board" class="logo"><strong>My Page</strong></a>
+            </header>
+            <br>
+            <div class="content">
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="inner">
+            <!-- Menu -->
+            <nav id="menu">
+                <header class="major">
+                    <h2>Menu</h2>
+                </header>
+                <ul>
+                    <li><a href="/study">Study</a></li>
+                    <li><a href="/board">Board</a></li>
+                    <li><a href="/mypage">My Page</a></li>
+                    <li><a href="/logout">log out</a></li>
+                </ul>
+            </nav>
+
+            <!-- Section -->
+            <section>
+                <header class="major">
+                    <h2>My info</h2>
+                </header>
+                <div class="mini-posts">
+                    <article>
+                        <a href="#" class="image" id="profile_img"></a>
+                        <p id="name"></p>
+                        <p id="sub"></p>
+                    </article>
+                </div>
+            </section>
+
+            <!— Footer —>
+            <footer id="footer">
+                <p class="copyright">&copy; 승선99. All rights reserved. <br>항해99 2기 김예지, 오일교, 이호진, 정창길, 한주연.<br>
+                    Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+            </footer>
+
+        </div>
+    </div>
+
+</div>
+
+<!— Scripts —>
+<script src="../static/assets/js/browser.min.js"></script>
+<script src="../static/assets/js/breakpoints.min.js"></script>
+<script src="../static/assets/js/util.js"></script>
+<script src="../static/assets/js/main.js"></script>
+
+</body>
+</html>
