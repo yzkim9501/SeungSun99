@@ -61,7 +61,6 @@
         function showPostDetail(postIdx){
             //여기에 포스트인덱스로 한개의 스터디 디테일 가져오는 API 작성
             $('#board-view').modal('show');
-            $('#post-name').val(postIdx+'번 게시물을 가지고와주세요');
             //모든 입력폼 disable하고, 작성자면 수정/삭제/닫기버튼. 작성자가 아니면 닫기버튼 표출
             //작성자가 수정버튼을 클릭하면 모든 입력폼 enable하고 저장버튼
 
@@ -186,7 +185,7 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="/board" class="logo"><strong>승선99</strong>자유 게시판</a>
+                <a href="/board" class="logo"><strong>승선99</strong> 자유 게시판</a>
             </header>
             <br>
             <div class="content">
@@ -205,7 +204,7 @@
                     </table>
                 </div>
                 <div style="float: right;">
-                    <a data-toggle="modal" href="#board-detail" class="button primary">글쓰기</a>
+                    <a data-toggle="modal" href="#board-detail" class="button primary">Write</a>
                 </div>
                 <ul class="pagination" id="pagination">
                 </ul>
@@ -285,12 +284,12 @@
                                     </div>
                                     <div class="col-12">
                                         <ul class="actions">
-                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="수정"/>
+                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="Modify"/>
                                             <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="del-button" onclick="delBoard()">삭제</button></li>
+                                                       data-dismiss="modal" id="del-button" onclick="delBoard()">Delete</button></li>
                                             </li>
                                             <li><input type="button" class="button primary small fit"
-                                                       data-dismiss="modal" value="닫기"/></li>
+                                                       data-dismiss="modal" value="Close"/></li>
                                         </ul>
                                     </div>
                                 </div>

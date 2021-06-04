@@ -42,7 +42,7 @@ def login():
     user_id = res_json['authed_user']['id']
 
     # slack app key 저장
-    APP_KEY = 'Bearer xoxp-1682940574129-1936865282436-1994343867299-8015c1ba2302c4bdd8b032540f984ad5'
+    APP_KEY = 'Bearer xoxp-1682940574129-1936865282436-2102798542897-9c5fae67f4b1509548b28201dd1a948c'
 
     # user 정보 불러올 수 있는 api url
     url = f'https://slack.com/api/users.info?user={user_id}'
@@ -50,7 +50,7 @@ def login():
     res = urllib.request.urlopen(req).read()
     encoding = urllib.request.urlopen(req).info().get_content_charset('utf-8')
     JSON_object = json.loads(res.decode(encoding))
-
+    print(JSON_object)
     # user name, sub name, 프로필사진 url 변수로 저장하여 study.html 파일로 패스
     first_name = JSON_object['user']['profile']['first_name']
     last_name = JSON_object['user']['profile']['last_name']

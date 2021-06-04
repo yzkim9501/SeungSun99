@@ -46,7 +46,8 @@
         $(document).ready(function () {
             showProfile();
             $('#leader').val(user_name);
-            $('#sortNumSelect').attr('style',"display:none")
+            $('#sortNumSelect').attr('style',"display:none");
+            openclose();
         });
 
         $(document).on('change','#sortNumSelect',function(){
@@ -112,9 +113,9 @@
                         async: false
                     }).done(function (json) {
                         if(json['msg']=="true"){
-                            $('#join-button').html('신청 취소');
+                            $('#join-button').html('Cancel Apply');
                         } else
-                            $('#join-button').html('신청');
+                            $('#join-button').html('Apply');
                     }).fail(function (xhr, status, errorThrown) {
                         alert(errorThrown);
                     })
@@ -259,7 +260,7 @@
         }
         function joinStudy() {
             var studyId=$('#study-id').val();
-            if ($('#join-button').html()=="신청"){
+            if ($('#join-button').html()=="Apply"){
                 $.ajax({
                     url: "/api/join_study?study_index="+studyId, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
                     data: {}, // HTTP 요청과 함께 서버로 보낼 데이터
@@ -399,7 +400,7 @@
                                                placeholder="스터디 이름 (ex) 웹개발 종합반 3주차부터 같이 달리실 분?" style="margin:0;"/>
                                     </div>
                                     <div class="col-4 col-12-xsmall form-label">
-                                        <input type="text" id="study-size" name="study-size" value="" required onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        <input type="number" id="study-size" name="study-size" value="" required min="1" max="4"
                                                placeholder="모집 인원(명)" style="margin:0 1em 0 0;"/>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
@@ -428,10 +429,10 @@
                                         <select name="level-category" id="study-level"
                                                 style="margin:0;" required>
                                             <option value="">- 스터디 난이도 -</option>
-                                            <option value="3">무관</option>
-                                            <option value="2">하</option>
-                                            <option value="1">중</option>
-                                            <option value="0">상</option>
+                                            <option value="3">난이도 무관</option>
+                                            <option value="2">난이도 하</option>
+                                            <option value="1">난이도 중</option>
+                                            <option value="0">난이도 상</option>
                                         </select>
                                     </div>
                                     <!-- Break -->
@@ -449,8 +450,8 @@
                                     <div class="col-3 form-label">
                                         <select name="join" id="join" style="margin:0;" required>
                                             <option value="">- 중도 참여 가능 여부 -</option>
-                                            <option value="0">가능</option>
-                                            <option value="1">불가</option>
+                                            <option value="0">중도 참여 가능</option>
+                                            <option value="1">중도 참여 불가</option>
                                         </select>
                                     </div>
                                     <div class="col-3 form-label">
@@ -503,7 +504,7 @@
                                     </div>
                                     <div class="col-4 col-12-xsmall form-label">
                                         <label for="study-size" style="width:40%">모집 인원</label>
-                                        <input type="text" id="study-size2" name="study-size" value="" required onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        <input type="number" id="study-size2" name="study-size" value="" required min="1" max="4"
                                                placeholder="모집 인원(명)" style="margin:0 1em 0 0;"/>
                                     </div>
                                     <div class="col-8 col-12-xsmall form-label">
@@ -532,10 +533,10 @@
                                         <select name="level-category" id="study-level2"
                                                 style="margin:0;" required>
                                             <option value="">- 스터디 난이도 -</option>
-                                            <option value="3">무관</option>
-                                            <option value="2">하</option>
-                                            <option value="1">중</option>
-                                            <option value="0">상</option>
+                                            <option value="3">난이도 무관</option>
+                                            <option value="2">난이도 하</option>
+                                            <option value="1">난이도 중</option>
+                                            <option value="0">난이도 상</option>
                                         </select>
                                     </div>
                                     <!-- Break -->
@@ -553,8 +554,8 @@
                                     <div class="col-3 form-label">
                                         <select name="join" id="join2" style="margin:0;" required>
                                             <option value="">- 중도 참여 가능 여부 -</option>
-                                            <option value="0">가능</option>
-                                            <option value="1">불가</option>
+                                            <option value="0">중도 참여 가능</option>
+                                            <option value="1">중도 참여 불가</option>
                                         </select>
                                     </div>
                                     <div class="col-3 form-label">
@@ -575,13 +576,13 @@
                                     <div class="col-12">
                                         <ul class="actions">
                                            <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()">신청</button></li>
-                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="수정"/>
+                                                       data-dismiss="modal" id="join-button" onclick="joinStudy()">Apply</button></li>
+                                            <li><input type="submit" class="button primary small fit" id="mod-button" value="Modify"/>
                                             <li><button class="button primary small fit"
-                                                       data-dismiss="modal" id="del-button" onclick="delStudy()">삭제</button></li>
+                                                       data-dismiss="modal" id="del-button" onclick="delStudy()">Delete</button></li>
                                             </li>
                                             <li><input type="button" class="button primary small fit"
-                                                       data-dismiss="modal" value="닫기"/></li>
+                                                       data-dismiss="modal" value="Close"/></li>
                                         </ul>
                                     </div>
                                 </div>
